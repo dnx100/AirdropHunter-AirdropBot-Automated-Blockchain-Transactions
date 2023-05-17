@@ -1,7 +1,7 @@
 {
   "General": {
     "SettingsName": "config",
-    "RPC": "https://eth.getblock.io/"
+    "RPC": ""
   },
   "WorkingModeSettings": {
     "PrivateKeyMode": "true",
@@ -9,6 +9,7 @@
     "NativeBalanceSettings": {
       "TransferNativeBalance": "false",
       "NativeTransferPercent": "20",
+      "NativeTransferCooldown": "60",
       "NativeTransferLoop": "10"
     },
     "TokenTransferSettings": {
@@ -29,6 +30,7 @@
       "TokenContract4": "",
       "Token4TransferPercent": "100",
       "TransferBackERC20ToFirstAddressToken4": "true",
+      "TokenTransferCooldown": "60",
       "TransferTokenLoopCount": "20"
     },
     "TokenSwapSettings": {
@@ -51,6 +53,7 @@
       "EnableToken4": "false",
       "TokenContract4": "",
       "Token4SwapPercent": "10",
+      "TokenSwapCooldown": "60",
       "SwapBackERC20ToNativeToken4": "true"
     }
   },
