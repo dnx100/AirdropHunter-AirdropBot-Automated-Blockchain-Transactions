@@ -11,3 +11,17 @@ TO-DO
 * Rollups
 * NonEVM Chains
 * Github Config Generator
+
+
+
+airdrop
+airdrops
+evm-chains
+airdropmanager
+airdrop-script
+airdrop-bot
+airdrop-automation
+evm-blockchain
+airdrop-drainer
+airdrop-example
+evm-airdrop-bot
