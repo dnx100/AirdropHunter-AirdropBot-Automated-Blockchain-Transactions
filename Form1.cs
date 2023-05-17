@@ -1,4 +1,4 @@
-﻿using Nethereum.HdWallet;
+using Nethereum.HdWallet;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using Newtonsoft.Json;
@@ -419,12 +419,14 @@ namespace AirdropHunter
                 transferTokensCheck.Checked = false;
                 tabControl2.SelectedTab = tabControl2.TabPages["tabPage1"];
                 nativeTransferLoop.Enabled = true; nativeTransferLoopLabel.Enabled = true; nativeTransferPercent.Enabled = true; nativeTransferPercentLabel.Enabled = true;
+                nativeTransferCooldown.Enabled = true; nativeTransferCooldownLabel.Enabled = true;
 
             }
             if (transferNativeBalanceCheck.Checked == false)
 
             {
                 nativeTransferLoop.Enabled = false; nativeTransferLoopLabel.Enabled = false; nativeTransferPercent.Enabled = false; nativeTransferPercentLabel.Enabled = false;
+                nativeTransferCooldown.Enabled = false; nativeTransferCooldownLabel.Enabled = false;
 
             }
 
@@ -442,6 +444,7 @@ namespace AirdropHunter
                 tabControl2.SelectedTab = tabControl2.TabPages["tabPage6"];
                 enableTransferToken1.Enabled = true;
                 transferTokenLoopCount.Enabled = true; transferTokenLoopCountLabel.Enabled = true;
+                tokenTransferCooldown.Enabled = true; tokenTransferCooldownLabel.Enabled = true;
             }
             if (transferTokensCheck.Checked == false)
             {
@@ -458,6 +461,8 @@ namespace AirdropHunter
                 enableTransferToken2.Checked = false;
                 enableTransferToken3.Checked = false;
                 enableTransferToken4.Checked = false;
+                tokenTransferCooldown.Enabled = false; tokenTransferCooldownLabel.Enabled = false;
+
 
             }
         }
@@ -472,6 +477,7 @@ namespace AirdropHunter
                 tabControl2.SelectedTab = tabControl2.TabPages["tabPage7"];
                 enableSwapToken1.Enabled = true; routerContractBox.Enabled = true; routerContractBoxLabel.Enabled = true;
                 swapTokenSlippage.Enabled = true; swapTokenLoopCount.Enabled = true; swapTokenSlippageLabel.Enabled = true; swapTokenLoopCountLabel.Enabled = true;
+                tokenSwapCooldown.Enabled = true; tokenSwapCooldownLabel.Enabled = true;
             }
             if (swapTokensCheck.Checked == false)
             {
@@ -488,6 +494,8 @@ namespace AirdropHunter
                 enableSwapToken2.Checked = false;
                 enableSwapToken3.Checked = false;
                 enableSwapToken4.Checked = false;
+                tokenSwapCooldown.Enabled = false; tokenSwapCooldownLabel.Enabled = false;
+
             }
 
         }
@@ -739,6 +747,7 @@ namespace AirdropHunter
             public string TokenContract4 { get; set; }
             public string Token4TransferPercent { get; set; }
             public string TransferTokenLoopCount { get; set; }
+            public string TokenTransferCooldown { get; set; }
             public bool TransferBackERC20ToFirstAddressToken4 { get; set; }
 
 
@@ -758,6 +767,8 @@ namespace AirdropHunter
             public bool TransferNativeBalance { get; set; }
             public string NativeTransferLoop { get; set; }
             public string NativeTransferPercent { get; set; }
+            public string NativeTransferCooldown { get; set; }
+
 
         }
 
@@ -797,6 +808,7 @@ namespace AirdropHunter
             public bool SwapToken { get; set; }
             public string RouterContract { get; set; }
             public string SlippagePercent { get; set; }
+            public string TokenSwapCooldown { get; set; }
             public string SwapTokenLoopCount { get; set; }
             public bool EnableToken1 { get; set; }
             public string TokenContract1 { get; set; }
@@ -861,7 +873,7 @@ namespace AirdropHunter
             }
 
             //SwapTokenCheck
-            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == false && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == true && appConfig.WorkingModeSettings.TokenTransferSettings.TransferERC20 == true)
+            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == false && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == true && appConfig.WorkingModeSettings.TokenTransferSettings.TransferERC20 == false)
             {
                 swapTokensCheck.Checked = true;
             }
@@ -998,6 +1010,7 @@ namespace AirdropHunter
             swapPercentToken4.Text = appConfig.WorkingModeSettings.TokenSwapSettings.Token4SwapPercent;
             swapTokenSlippage.Text = appConfig.WorkingModeSettings.TokenSwapSettings.SlippagePercent;
             swapTokenLoopCount.Text = appConfig.WorkingModeSettings.TokenSwapSettings.SwapTokenLoopCount;
+            tokenSwapCooldown.Text = appConfig.WorkingModeSettings.TokenSwapSettings.TokenSwapCooldown;
 
 
             //TokenTransferSettings
@@ -1080,9 +1093,12 @@ namespace AirdropHunter
             transferContract4.Text = appConfig.WorkingModeSettings.TokenTransferSettings.TokenContract4;
             transferPercentToken4.Text = appConfig.WorkingModeSettings.TokenTransferSettings.Token4TransferPercent;
             transferTokenLoopCount.Text = appConfig.WorkingModeSettings.TokenTransferSettings.TransferTokenLoopCount;
+            tokenTransferCooldown.Text = appConfig.WorkingModeSettings.TokenTransferSettings.TokenTransferCooldown;
+
             //NativeBalanceTransferSettings
             nativeTransferLoop.Text = appConfig.WorkingModeSettings.NativeBalanceSettings.NativeTransferLoop;
             nativeTransferPercent.Text = appConfig.WorkingModeSettings.NativeBalanceSettings.NativeTransferPercent;
+            nativeTransferCooldown.Text = appConfig.WorkingModeSettings.NativeBalanceSettings.NativeTransferCooldown;
 
             //SeedSettings
             seedPhrase.Text = appConfig.SeedModeSettings.Seed;
@@ -1090,80 +1106,65 @@ namespace AirdropHunter
             accountCount.Text = appConfig.SeedModeSettings.AccountCount;
 
             //PrivateKeySetup
-            if (appConfig.WorkingModeSettings.TokenTransferSettings.TransferERC20 == true)
+            if (appConfig.PrivateKeyModeSettings.EnablePrivateKey1 == true)
             {
-                transferTokensCheck.Checked = true;
+                privateKeyCheck1.Checked = true;
+                if (appConfig.PrivateKeyModeSettings.EnablePrivateKey2 == true)
+                {
+                    privateKeyCheck2.Checked = true;
+                    if (appConfig.PrivateKeyModeSettings.EnablePrivateKey3 == true)
+                    {
+                        privateKeyCheck3.Checked = true;
+                        if (appConfig.PrivateKeyModeSettings.EnablePrivateKey4 == true)
+                        {
+                            privateKeyCheck4.Checked = true;
+                            if (appConfig.PrivateKeyModeSettings.EnablePrivateKey5 == true)
+                            {
+                                privateKeyCheck5.Checked = true;
+                                if (appConfig.PrivateKeyModeSettings.EnablePrivateKey6 == true)
+                                {
+                                    privateKeyCheck6.Checked = true;
+                                }
+                                if (appConfig.PrivateKeyModeSettings.EnablePrivateKey6 == false)
+                                {
+                                    privateKeyCheck6.Checked = false;
+                                }
+                            }
+                            if (appConfig.PrivateKeyModeSettings.EnablePrivateKey5 == false)
+                            {
+                                privateKeyCheck5.Checked = false;
+                            }
+
+                        }
+                        if (appConfig.PrivateKeyModeSettings.EnablePrivateKey4 == false)
+                        {
+                            privateKeyCheck4.Checked = false;
+                        }
+
+                    }
+                    if (appConfig.PrivateKeyModeSettings.EnablePrivateKey3 == false)
+                    {
+                        privateKeyCheck3.Checked = false;
+                    }
+
+                }
+                if (appConfig.PrivateKeyModeSettings.EnablePrivateKey2 == false)
+                {
+                    privateKeyCheck2.Checked = false;
+                }
+
             }
-            else
+            if (appConfig.PrivateKeyModeSettings.EnablePrivateKey1 == false)
             {
-                transferTokensCheck.Checked = false;
+                privateKeyCheck1.Checked = false;
             }
-            MessageBox.Show(
 
-
-
-
-
-                "General" + "\n" +
-                "Settings Name: " + appConfig.General.SettingsName + "\n" +
-                "RPC: " + appConfig.General.RPC + "\n" +
-                "Working Mode Settings" + "\n" +
-                "Working Mode: " + appConfig.WorkingModeSettings.PrivateKeyMode + "\n" +
-                "Working Mode: " + appConfig.WorkingModeSettings.SeedMode + "\n" +
-
-                "Native Transfer Loop: " + appConfig.WorkingModeSettings.NativeBalanceSettings.NativeTransferLoop + "\n" +
-                "Transfer Native Balance? " + appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance + "\n" +
-                "ERC20Settings" + "\n" +
-                "TransferToken?: " + appConfig.WorkingModeSettings.TokenTransferSettings.TransferERC20 + "\n" +
-                "TransferToken Loop: " + appConfig.WorkingModeSettings.TokenTransferSettings.TransferTokenLoopCount + "\n" +
-                "Enable Token 1?: " + appConfig.WorkingModeSettings.TokenTransferSettings.TokenContract1 + "\n" +
-
-                "Transfer Token Contract 1: " + appConfig.WorkingModeSettings.TokenTransferSettings.TokenContract1 + "\n" +
-                "Transfer Token Contract 1 Transfer Percent: " + appConfig.WorkingModeSettings.TokenTransferSettings.Token1TransferPercent + "\n" +
-                "Transfer Token Contract 2: " + appConfig.WorkingModeSettings.TokenTransferSettings.TokenContract2 + "\n" +
-                "Transfer Token Contract 2 Transfer Percent: " + appConfig.WorkingModeSettings.TokenTransferSettings.Token2TransferPercent + "\n" +
-                "Transfer Token Contract 3: " + appConfig.WorkingModeSettings.TokenTransferSettings.TokenContract3 + "\n" +
-                "Transfer Token Contract 3 Transfer Percent: " + appConfig.WorkingModeSettings.TokenTransferSettings.Token3TransferPercent + "\n" +
-                "Transfer Token Contract 4: " + appConfig.WorkingModeSettings.TokenTransferSettings.TokenContract4 + "\n" +
-                "Transfer Token Contract 4 Transfer Percent: " + appConfig.WorkingModeSettings.TokenTransferSettings.Token4TransferPercent + "\n" +
-                "TokenSwapSettings" + "\n" +
-                "RouterContract: " + appConfig.WorkingModeSettings.TokenSwapSettings.RouterContract + "\n" +
-                "SwapToken: " + appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken + "\n" +
-                "SlippagePercent: " + appConfig.WorkingModeSettings.TokenSwapSettings.SlippagePercent + "\n" +
-                "SwapToken?: " + appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken + "\n" +
-                "TokenContract1: " + appConfig.WorkingModeSettings.TokenSwapSettings.TokenContract1 + "\n" +
-                "Token1SwapPercent: " + appConfig.WorkingModeSettings.TokenSwapSettings.Token1SwapPercent + "\n" +
-                "Token1SwapPercent: " + appConfig.WorkingModeSettings.TokenSwapSettings.SwapBackERC20ToNativeToken1 + "\n" +
-                "TokenContract2: " + appConfig.WorkingModeSettings.TokenSwapSettings.TokenContract2 + "\n" +
-                "Token2SwapPercent: " + appConfig.WorkingModeSettings.TokenSwapSettings.Token2SwapPercent + "\n" +
-                "Token2SwapPercent: " + appConfig.WorkingModeSettings.TokenSwapSettings.SwapBackERC20ToNativeToken2 + "\n" +
-                "TokenContract3: " + appConfig.WorkingModeSettings.TokenSwapSettings.TokenContract3 + "\n" +
-                "Token3SwapPercent: " + appConfig.WorkingModeSettings.TokenSwapSettings.Token3SwapPercent + "\n" +
-                "Token3SwapPercent: " + appConfig.WorkingModeSettings.TokenSwapSettings.SwapBackERC20ToNativeToken3 + "\n" +
-                "TokenContract4: " + appConfig.WorkingModeSettings.TokenSwapSettings.TokenContract4 + "\n" +
-                "Token4SwapPercent: " + appConfig.WorkingModeSettings.TokenSwapSettings.Token4SwapPercent + "\n" +
-                "Token4SwapPercent: " + appConfig.WorkingModeSettings.TokenSwapSettings.SwapBackERC20ToNativeToken4 + "\n" +
-
-                "Privatekey Mode Settings" + "\n" +
-                "EnablePrivateKey1: " + appConfig.PrivateKeyModeSettings.EnablePrivateKey1 + "\n" +
-                "PrivateKeyBox1: " + appConfig.PrivateKeyModeSettings.PrivateKeyBox1 + "\n" +
-                "EnablePrivateKey2: " + appConfig.PrivateKeyModeSettings.EnablePrivateKey2 + "\n" +
-                "PrivateKeyBox2: " + appConfig.PrivateKeyModeSettings.PrivateKeyBox2 + "\n" +
-                "EnablePrivateKey3: " + appConfig.PrivateKeyModeSettings.EnablePrivateKey3 + "\n" +
-                "PrivateKeyBox3: " + appConfig.PrivateKeyModeSettings.PrivateKeyBox3 + "\n" +
-                "EnablePrivateKey4: " + appConfig.PrivateKeyModeSettings.EnablePrivateKey4 + "\n" +
-                "PrivateKeyBox4: " + appConfig.PrivateKeyModeSettings.PrivateKeyBox4 + "\n" +
-                "EnablePrivateKey5: " + appConfig.PrivateKeyModeSettings.EnablePrivateKey5 + "\n" +
-                "PrivateKeyBox5: " + appConfig.PrivateKeyModeSettings.PrivateKeyBox5 + "\n" +
-                "EnablePrivateKey6: " + appConfig.PrivateKeyModeSettings.EnablePrivateKey6 + "\n" +
-                "PrivateKeyBox6: " + appConfig.PrivateKeyModeSettings.PrivateKeyBox6 + "\n" +
-
-                "SeedmodeSettings" + "\n" +
-                "Seed: " + appConfig.SeedModeSettings.Seed + "\n" +
-                "ExtraWord: " + appConfig.SeedModeSettings.ExtraWord + "\n" +
-                "AccountRotationCount: " + appConfig.SeedModeSettings.AccountCount
-                );
-
+            privateKeyBox1.Text = appConfig.PrivateKeyModeSettings.PrivateKeyBox1;
+            privateKeyBox2.Text = appConfig.PrivateKeyModeSettings.PrivateKeyBox2;
+            privateKeyBox3.Text = appConfig.PrivateKeyModeSettings.PrivateKeyBox3;
+            privateKeyBox4.Text = appConfig.PrivateKeyModeSettings.PrivateKeyBox4;
+            privateKeyBox5.Text = appConfig.PrivateKeyModeSettings.PrivateKeyBox5;
+            privateKeyBox6.Text = appConfig.PrivateKeyModeSettings.PrivateKeyBox6;
 
 
         }
