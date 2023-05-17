@@ -1460,40 +1460,84 @@ namespace AirdropHunter
         {
 
             button1.Text = "Stop";
-
-            if (nativeBalanceTransferEngine.IsBusy == true)
+            if (transferNativeBalanceCheck.Checked == true)
             {
-                Console.WriteLine("Engine will shutdown at the finish of loop...");
-                button1.Enabled = false;
-                button1.Text = "Stopping";
-
-            }
-
-            if (nativeBalanceTransferEngine.IsBusy == false)
-            {
-                Console.Clear();
-                Console.WriteLine("Airdrop Hunter Bot Started");
-
-
-                if (seedMode.Checked == true) { Console.WriteLine("Seed Mode Selected"); Console.WriteLine("You Can Work With As Wanted As Accounts"); Console.WriteLine("Seed Mode Loaded With " + privatekeycount + " Accounts."); }
-                if (privateKeyMode.Checked == true) { Console.WriteLine("Private Key Mode Selected"); Console.WriteLine("You Can Work Up To 6 Accounts"); Console.WriteLine("Private Key Mode Loaded With " + privatekeycount + " Accounts."); }
-
-
-                for (int i = 0; i < privatekeycount; i++)
+                if (nativeBalanceTransferEngine.IsBusy == true)
                 {
-                    Console.WriteLine("Account index : " + i + " - Address : " + accountaddress[i] + " - Balance : " + accountbalance[i] + " - Private key : " + accountprivatekey[i]);
+                    Console.WriteLine("Engine will shutdown at the finish of loop...");
+                    button1.Enabled = false;
+                    button1.Text = "Stopping";
+
                 }
 
-                if (transferNativeBalanceCheck.Checked == true)
+                if (nativeBalanceTransferEngine.IsBusy == false)
                 {
-                    Console.WriteLine("Transfer Native Balance Mode Selected"); Console.WriteLine("Bot Will Transfer Native Balance (ETH, BNB, Matic, AVAX etc.) For Loaded Accounts In Order. At Least 2 Accounts Needed. This Process Will Take As Long As The Number Of Loop Count.");
-                    transferNativeBalancePercent = Convert.ToInt32(nativeTransferPercent.Text);
-                    transferNativeBalanceLoop = Convert.ToInt32(nativeTransferLoop.Text);
-                    nativeBalanceTransferEngine.RunWorkerAsync();
+                    Console.Clear();
+                    Console.WriteLine("Airdrop Hunter Bot Started");
+                    if (seedMode.Checked == true) { Console.WriteLine("Seed Mode Selected"); Console.WriteLine("You Can Work With As Wanted As Accounts"); Console.WriteLine("Seed Mode Loaded With " + privatekeycount + " Accounts."); }
+                    if (privateKeyMode.Checked == true) { Console.WriteLine("Private Key Mode Selected"); Console.WriteLine("You Can Work Up To 6 Accounts"); Console.WriteLine("Private Key Mode Loaded With " + privatekeycount + " Accounts."); }
+                    for (int i = 0; i < privatekeycount; i++)
+                    {
+                        Console.WriteLine("Account index : " + i + " - Address : " + accountaddress[i] + " - Balance : " + accountbalance[i] + " - Private key : " + accountprivatekey[i]);
+                    }
+                    if (transferNativeBalanceCheck.Checked == true)
+                    {
+                        Console.WriteLine("Transfer Native Balance Mode Selected"); Console.WriteLine("Bot Will Transfer Native Balance (ETH, BNB, Matic, AVAX etc.) For Loaded Accounts In Order. At Least 2 Accounts Needed. This Process Will Take As Long As The Number Of Loop Count.");
+                        transferNativeBalancePercent = Convert.ToInt32(nativeTransferPercent.Text);
+                        transferNativeBalanceLoop = Convert.ToInt32(nativeTransferLoop.Text);
+                        nativeBalanceTransferEngine.RunWorkerAsync();
+                    }
+
                 }
-                if (swapTokensCheck.Checked == true) { Console.WriteLine("Swap Tokens Mode Selected"); Console.WriteLine("Bot Will Swap Tokens. You Can Define Token Contracts Up To 4. Set Router Contract, Percent And Slippage Correctly. Router Contract Differs For Every Network. This Process Will Take As Long As The Number Of Loop Count."); }
-                if (transferTokensCheck.Checked == true) { Console.WriteLine("Transfer Tokens Mode Selected"); Console.WriteLine("Bot Will Transfer Token Balances For Loaded Accounts In Order. At Least 2 Accounts Needed. You Can Define Token Contracts Up To 4. Set Percent Correctly. This Process Will Take As Long As The Number Of Loop Count."); }
             }
+            if (transferTokensCheck.Checked == true)
+            {
+                if (nativeBalanceTransferEngine.IsBusy == true)
+                {
+                    Console.WriteLine("Engine will shutdown at the finish of loop...");
+                    button1.Enabled = false;
+                    button1.Text = "Stopping";
+
+                }
+
+                if (nativeBalanceTransferEngine.IsBusy == false)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Airdrop Hunter Bot Started");
+                    if (seedMode.Checked == true) { Console.WriteLine("Seed Mode Selected"); Console.WriteLine("You Can Work With As Wanted As Accounts"); Console.WriteLine("Seed Mode Loaded With " + privatekeycount + " Accounts."); }
+                    if (privateKeyMode.Checked == true) { Console.WriteLine("Private Key Mode Selected"); Console.WriteLine("You Can Work Up To 6 Accounts"); Console.WriteLine("Private Key Mode Loaded With " + privatekeycount + " Accounts."); }
+                    for (int i = 0; i < privatekeycount; i++)
+                    {
+                        Console.WriteLine("Account index : " + i + " - Address : " + accountaddress[i] + " - Balance : " + accountbalance[i] + " - Private key : " + accountprivatekey[i]);
+                    }
+                    if (transferTokensCheck.Checked == true) { Console.WriteLine("Transfer Tokens Mode Selected"); Console.WriteLine("Bot Will Transfer Token Balances For Loaded Accounts In Order. At Least 2 Accounts Needed. You Can Define Token Contracts Up To 4. Set Percent Correctly. This Process Will Take As Long As The Number Of Loop Count."); }
+                }
+            }
+            if (swapTokensCheck.Checked == true)
+            {
+                if (nativeBalanceTransferEngine.IsBusy == true)
+                {
+                    Console.WriteLine("Engine will shutdown at the finish of loop...");
+                    button1.Enabled = false;
+                    button1.Text = "Stopping";
+
+                }
+
+                if (nativeBalanceTransferEngine.IsBusy == false)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Airdrop Hunter Bot Started");
+                    if (seedMode.Checked == true) { Console.WriteLine("Seed Mode Selected"); Console.WriteLine("You Can Work With As Wanted As Accounts"); Console.WriteLine("Seed Mode Loaded With " + privatekeycount + " Accounts."); }
+                    if (privateKeyMode.Checked == true) { Console.WriteLine("Private Key Mode Selected"); Console.WriteLine("You Can Work Up To 6 Accounts"); Console.WriteLine("Private Key Mode Loaded With " + privatekeycount + " Accounts."); }
+                    for (int i = 0; i < privatekeycount; i++)
+                    {
+                        Console.WriteLine("Account index : " + i + " - Address : " + accountaddress[i] + " - Balance : " + accountbalance[i] + " - Private key : " + accountprivatekey[i]);
+                    }
+
+                    if (swapTokensCheck.Checked == true) { Console.WriteLine("Swap Tokens Mode Selected"); Console.WriteLine("Bot Will Swap Tokens. You Can Define Token Contracts Up To 4. Set Router Contract, Percent And Slippage Correctly. Router Contract Differs For Every Network. This Process Will Take As Long As The Number Of Loop Count."); }
+                }
+            }
+
 
         }
 
