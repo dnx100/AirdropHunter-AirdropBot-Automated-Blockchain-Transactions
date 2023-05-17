@@ -1,4 +1,4 @@
-﻿namespace AirdropHunter
+namespace AirdropHunter
 {
     partial class Form1
     {
@@ -126,6 +126,12 @@
             this.transferNativeBalanceCheck = new System.Windows.Forms.CheckBox();
             this.swapTokensCheck = new System.Windows.Forms.CheckBox();
             this.transferTokensCheck = new System.Windows.Forms.CheckBox();
+            this.nativeTransferCooldown = new System.Windows.Forms.TextBox();
+            this.nativeTransferCooldownLabel = new System.Windows.Forms.Label();
+            this.tokenSwapCooldown = new System.Windows.Forms.TextBox();
+            this.tokenSwapCooldownLabel = new System.Windows.Forms.Label();
+            this.tokenTransferCooldown = new System.Windows.Forms.TextBox();
+            this.tokenTransferCooldownLabel = new System.Windows.Forms.Label();
             this.tabControl3.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -532,6 +538,8 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.nativeTransferCooldown);
+            this.tabPage1.Controls.Add(this.nativeTransferCooldownLabel);
             this.tabPage1.Controls.Add(this.nativeTransferPercent);
             this.tabPage1.Controls.Add(this.nativeTransferPercentLabel);
             this.tabPage1.Controls.Add(this.nativeTransferLoop);
@@ -546,11 +554,11 @@
             // nativeTransferPercent
             // 
             this.nativeTransferPercent.Enabled = false;
-            this.nativeTransferPercent.Location = new System.Drawing.Point(108, 17);
+            this.nativeTransferPercent.Location = new System.Drawing.Point(127, 13);
             this.nativeTransferPercent.Name = "nativeTransferPercent";
             this.nativeTransferPercent.Size = new System.Drawing.Size(52, 20);
             this.nativeTransferPercent.TabIndex = 47;
-            this.nativeTransferPercent.Text = "4";
+            this.nativeTransferPercent.Text = "10";
             // 
             // nativeTransferPercentLabel
             // 
@@ -565,17 +573,17 @@
             // nativeTransferLoop
             // 
             this.nativeTransferLoop.Enabled = false;
-            this.nativeTransferLoop.Location = new System.Drawing.Point(249, 17);
+            this.nativeTransferLoop.Location = new System.Drawing.Point(127, 40);
             this.nativeTransferLoop.Name = "nativeTransferLoop";
             this.nativeTransferLoop.Size = new System.Drawing.Size(52, 20);
             this.nativeTransferLoop.TabIndex = 45;
-            this.nativeTransferLoop.Text = "4";
+            this.nativeTransferLoop.Text = "20";
             // 
             // nativeTransferLoopLabel
             // 
             this.nativeTransferLoopLabel.AutoSize = true;
             this.nativeTransferLoopLabel.Enabled = false;
-            this.nativeTransferLoopLabel.Location = new System.Drawing.Point(181, 20);
+            this.nativeTransferLoopLabel.Location = new System.Drawing.Point(16, 46);
             this.nativeTransferLoopLabel.Name = "nativeTransferLoopLabel";
             this.nativeTransferLoopLabel.Size = new System.Drawing.Size(62, 13);
             this.nativeTransferLoopLabel.TabIndex = 44;
@@ -583,6 +591,8 @@
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.tokenSwapCooldown);
+            this.tabPage7.Controls.Add(this.tokenSwapCooldownLabel);
             this.tabPage7.Controls.Add(this.swapTokenSlippage);
             this.tabPage7.Controls.Add(this.swapTokenSlippageLabel);
             this.tabPage7.Controls.Add(this.swapBackNativeToken4);
@@ -920,6 +930,8 @@
             // 
             // tabPage6
             // 
+            this.tabPage6.Controls.Add(this.tokenTransferCooldown);
+            this.tabPage6.Controls.Add(this.tokenTransferCooldownLabel);
             this.tabPage6.Controls.Add(this.transferBackToAccount4);
             this.tabPage6.Controls.Add(this.transferBackToAccount3);
             this.tabPage6.Controls.Add(this.transferBackToAccount2);
@@ -1261,6 +1273,63 @@
             this.transferTokensCheck.UseVisualStyleBackColor = true;
             this.transferTokensCheck.CheckedChanged += new System.EventHandler(this.transferTokensCheck_CheckedChanged);
             // 
+            // nativeTransferCooldown
+            // 
+            this.nativeTransferCooldown.Enabled = false;
+            this.nativeTransferCooldown.Location = new System.Drawing.Point(127, 65);
+            this.nativeTransferCooldown.Name = "nativeTransferCooldown";
+            this.nativeTransferCooldown.Size = new System.Drawing.Size(52, 20);
+            this.nativeTransferCooldown.TabIndex = 49;
+            this.nativeTransferCooldown.Text = "60";
+            // 
+            // nativeTransferCooldownLabel
+            // 
+            this.nativeTransferCooldownLabel.AutoSize = true;
+            this.nativeTransferCooldownLabel.Enabled = false;
+            this.nativeTransferCooldownLabel.Location = new System.Drawing.Point(16, 69);
+            this.nativeTransferCooldownLabel.Name = "nativeTransferCooldownLabel";
+            this.nativeTransferCooldownLabel.Size = new System.Drawing.Size(105, 13);
+            this.nativeTransferCooldownLabel.TabIndex = 48;
+            this.nativeTransferCooldownLabel.Text = "Cooldown (Seconds)";
+            // 
+            // tokenSwapCooldown
+            // 
+            this.tokenSwapCooldown.Enabled = false;
+            this.tokenSwapCooldown.Location = new System.Drawing.Point(419, 143);
+            this.tokenSwapCooldown.Name = "tokenSwapCooldown";
+            this.tokenSwapCooldown.Size = new System.Drawing.Size(52, 20);
+            this.tokenSwapCooldown.TabIndex = 51;
+            this.tokenSwapCooldown.Text = "60";
+            // 
+            // tokenSwapCooldownLabel
+            // 
+            this.tokenSwapCooldownLabel.AutoSize = true;
+            this.tokenSwapCooldownLabel.Enabled = false;
+            this.tokenSwapCooldownLabel.Location = new System.Drawing.Point(308, 147);
+            this.tokenSwapCooldownLabel.Name = "tokenSwapCooldownLabel";
+            this.tokenSwapCooldownLabel.Size = new System.Drawing.Size(105, 13);
+            this.tokenSwapCooldownLabel.TabIndex = 50;
+            this.tokenSwapCooldownLabel.Text = "Cooldown (Seconds)";
+            // 
+            // tokenTransferCooldown
+            // 
+            this.tokenTransferCooldown.Enabled = false;
+            this.tokenTransferCooldown.Location = new System.Drawing.Point(417, 144);
+            this.tokenTransferCooldown.Name = "tokenTransferCooldown";
+            this.tokenTransferCooldown.Size = new System.Drawing.Size(52, 20);
+            this.tokenTransferCooldown.TabIndex = 73;
+            this.tokenTransferCooldown.Text = "60";
+            // 
+            // tokenTransferCooldownLabel
+            // 
+            this.tokenTransferCooldownLabel.AutoSize = true;
+            this.tokenTransferCooldownLabel.Enabled = false;
+            this.tokenTransferCooldownLabel.Location = new System.Drawing.Point(306, 148);
+            this.tokenTransferCooldownLabel.Name = "tokenTransferCooldownLabel";
+            this.tokenTransferCooldownLabel.Size = new System.Drawing.Size(105, 13);
+            this.tokenTransferCooldownLabel.TabIndex = 72;
+            this.tokenTransferCooldownLabel.Text = "Cooldown (Seconds)";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1412,6 +1481,12 @@
         private System.Windows.Forms.CheckBox transferNativeBalanceCheck;
         private System.Windows.Forms.CheckBox swapTokensCheck;
         private System.Windows.Forms.CheckBox transferTokensCheck;
+        private System.Windows.Forms.TextBox nativeTransferCooldown;
+        private System.Windows.Forms.Label nativeTransferCooldownLabel;
+        private System.Windows.Forms.TextBox tokenSwapCooldown;
+        private System.Windows.Forms.Label tokenSwapCooldownLabel;
+        private System.Windows.Forms.TextBox tokenTransferCooldown;
+        private System.Windows.Forms.Label tokenTransferCooldownLabel;
     }
 }
 
