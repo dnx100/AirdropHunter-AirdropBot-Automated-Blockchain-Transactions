@@ -1,7 +1,8 @@
 {
   "General": {
     "SettingsName": "config",
-    "RPC": ""
+    "RPC": "",
+    "ChainID": "5"
   },
   "WorkingModeSettings": {
     "PrivateKeyMode": "true",
