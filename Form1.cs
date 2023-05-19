@@ -1,3 +1,5 @@
+using Nethereum.ABI.FunctionEncoding.Attributes;
+using Nethereum.Contracts;
 using Nethereum.HdWallet;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
@@ -5,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -699,11 +702,6 @@ namespace AirdropHunter
 
 
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-
-        }
-
 
 
 
@@ -760,6 +758,7 @@ namespace AirdropHunter
         {
             public string SettingsName { get; set; }
             public string RPC { get; set; }
+            public string ChainID { get; set; }
         }
 
         public class NativeBalanceSettings
@@ -841,7 +840,9 @@ namespace AirdropHunter
         {
             Config appConfig = JsonConvert.DeserializeObject<Config>(File.ReadAllText(@Path.GetDirectoryName(Application.ExecutablePath) + "\\" + settingsName.Text + ".json"));
             //RPC
+
             rpcURL.Text = appConfig.General.RPC;
+            chainID.Text = appConfig.General.ChainID;
             settingsName.Text = appConfig.General.SettingsName;
 
             if (appConfig.WorkingModeSettings.SeedMode == true && appConfig.WorkingModeSettings.PrivateKeyMode == false)
@@ -1511,6 +1512,16 @@ namespace AirdropHunter
                         Console.WriteLine("Account index : " + i + " - Address : " + accountaddress[i] + " - Balance : " + accountbalance[i] + " - Private key : " + accountprivatekey[i]);
                     }
                     if (transferTokensCheck.Checked == true) { Console.WriteLine("Transfer Tokens Mode Selected"); Console.WriteLine("Bot Will Transfer Token Balances For Loaded Accounts In Order. At Least 2 Accounts Needed. You Can Define Token Contracts Up To 4. Set Percent Correctly. This Process Will Take As Long As The Number Of Loop Count."); }
+
+
+                    tokenTransferEngine.RunWorkerAsync();
+
+
+
+
+
+
+
                 }
             }
             if (swapTokensCheck.Checked == true)
@@ -1539,6 +1550,247 @@ namespace AirdropHunter
             }
 
 
+        }
+
+        [Function("balanceOf", "uint256")]
+        public class BalanceOfFunction : FunctionMessage
+        {
+            [Parameter("address", "_owner", 1)]
+            public string Owner { get; set; }
+        }
+        [Function("transfer", "bool")]
+        public class TransferFunction : FunctionMessage
+        {
+            [Parameter("address", "_to", 1)]
+            public string To { get; set; }
+
+            [Parameter("uint256", "_value", 2)]
+            public BigInteger TokenAmount { get; set; }
+        }
+        [Event("Transfer")]
+        public class TransferEventDTO : IEventDTO
+        {
+            [Parameter("address", "_from", 1, true)]
+            public string From { get; set; }
+
+            [Parameter("address", "_to", 2, true)]
+            public string To { get; set; }
+
+            [Parameter("uint256", "_value", 3, false)]
+            public BigInteger Value { get; set; }
+        }
+        [FunctionOutput]
+        public class BalanceOfOutputDTO : IFunctionOutputDTO
+        {
+            [Parameter("uint256", "balance", 1)]
+            public BigInteger Balance { get; set; }
+        }
+        [FunctionOutput]
+        public class BalanceOfOutputMultipleDTO : IFunctionOutputDTO
+        {
+            [Parameter("uint256", "balance1", 1)]
+            public BigInteger Balance1 { get; set; }
+
+            [Parameter("uint256", "balance2", 2)]
+            public BigInteger Balance2 { get; set; }
+
+            [Parameter("uint256", "balance3", 3)]
+            public BigInteger Balance3 { get; set; }
+        }
+
+        private async void tokenTransferEngine_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Config appConfig = JsonConvert.DeserializeObject<Config>(File.ReadAllText(@Path.GetDirectoryName(Application.ExecutablePath) + "\\" + settingsName.Text + ".json"));
+            int contractCount = 0;
+            if (enableTransferToken1.Enabled == true)
+            {
+                contractCount = 1;
+                if (enableTransferToken2.Enabled == true)
+                {
+                    contractCount = 2;
+                    if (enableTransferToken3.Enabled == true)
+                    {
+                        contractCount = 3;
+                        if (enableTransferToken4.Enabled == true)
+                        {
+                            contractCount = 4;
+
+                        }
+                    }
+                }
+            }
+
+
+            for (int loop = 0; loop < contractCount; loop++)
+            {
+                if (button1.Text == "Stopping")
+                {
+                    button1.Text = "Start";
+                    button1.Enabled = true;
+                    break;
+
+                }
+                for (int i = 0; i < privatekeycount; i++)
+                {
+                    if (button1.Text == "Stopping")
+                    {
+                        button1.Text = "Start";
+                        button1.Enabled = true;
+                        break;
+                    }
+                    //Console.WriteLine("Account index : " + i + " - Address : " + accountaddress[i] + " - Balance : " + accountbalance[i] + " - Private key : " + accountprivatekey[i]);
+                    BigInteger chain = BigInteger.Parse(chainID.Text);
+                    var account = new Account(accountprivatekey[i], chain);
+
+                    rpc = rpcURL.Text;
+                    var web3 = new Web3(account, rpc);
+
+
+
+
+                    if (i + 1 == privatekeycount)
+                    {
+                        // Check balance
+                        //CheckBalance(web3, accountaddress[0]).Wait();
+                        // Transfer ether from account to 0xa2271e783f3D469e94C4bFc099E8d7913cD99612
+
+                        Console.WriteLine("\n" + "Token Balance Transfering Account " + i + " to Account 0");
+
+                        var balanceOfFunctionMessage = new BalanceOfFunction()
+                        {
+                            Owner = account.Address,
+                        };
+
+                        var balanceHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
+
+                        var balance = await balanceHandler.QueryAsync<BigInteger>(transferContract1.Text, balanceOfFunctionMessage);
+
+                        Console.WriteLine("Account " + i + " Token Balance: " + balance);
+
+                        var receiverAddress = accountaddress[0];
+                        var transferHandler = web3.Eth.GetContractTransactionHandler<TransferFunction>();
+
+                        var transfer = new TransferFunction()
+                        {
+                            To = receiverAddress,
+                            TokenAmount = balance
+                        };
+
+                        var transactionTransferReceipt =
+                            await transferHandler.SendRequestAndWaitForReceiptAsync(transferContract1.Text, transfer);
+
+                        Console.WriteLine("Transaction hash transfer is: " + transactionTransferReceipt.TransactionHash);
+
+                        balance = await balanceHandler.QueryAsync<BigInteger>(transferContract1.Text, balanceOfFunctionMessage);
+
+                        Console.WriteLine("Account 0 Token Balance: " + balance);
+
+
+
+
+
+
+                        var TransactionHash = TransferEther(web3, account, accountaddress[0], Convert.ToDecimal(accountbalance[i]) * transferNativeBalancePercent / 100);
+
+                        // check the status of transaction
+                        GetTransactionReceipt(web3, TransactionHash);
+                        accountbalance[0] = (Convert.ToDecimal(accountbalance[0]) + Convert.ToDecimal(accountbalance[i]) * transferNativeBalancePercent / 100).ToString();
+                        accountbalance[i] = (Convert.ToDecimal(accountbalance[i]) - Convert.ToDecimal(accountbalance[i]) * transferNativeBalancePercent / 100).ToString();
+                        for (int b = 0; b < accountaddress.Length; b++)
+                        {
+                            if (accountaddress[b] == null)
+                            {
+                                break;
+                            }
+                            Console.WriteLine("Account " + (b) + " Balance: " + accountbalance[b]);
+
+                        }
+                        // Check balance
+                        //CheckBalance(web3, accountaddress[i + 1]).Wait();
+                    }
+                    else
+                    {
+                        // Check balance
+                        //CheckBalance(web3, accountaddress[i + 1]).Wait();
+                        // Transfer ether from account to 0xa2271e783f3D469e94C4bFc099E8d7913cD99612
+                        Console.WriteLine("\n" + "Token Balance Transfering Account " + i + " to Account " + (i + 1));
+
+                        var balanceOfFunctionMessage = new BalanceOfFunction()
+                        {
+                            Owner = account.Address,
+                        };
+
+                        var balanceHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
+
+                        var balance = await balanceHandler.QueryAsync<BigInteger>(transferContract1.Text, balanceOfFunctionMessage);
+
+                        Console.WriteLine("Account " + i + " Token Balance: " + balance);
+
+                        var receiverAddress = accountaddress[i + 1];
+                        var transferHandler = web3.Eth.GetContractTransactionHandler<TransferFunction>();
+
+                        var transfer = new TransferFunction()
+                        {
+                            To = receiverAddress,
+                            TokenAmount = balance
+                        };
+
+                        var transactionTransferReceipt =
+                            await transferHandler.SendRequestAndWaitForReceiptAsync(transferContract1.Text, transfer);
+
+                        Console.WriteLine("Transaction hash transfer is: " + transactionTransferReceipt.TransactionHash);
+
+                        balance = await balanceHandler.QueryAsync<BigInteger>(transferContract1.Text, balanceOfFunctionMessage);
+
+                        Console.WriteLine("Account " + (i + 1) + " Token Balance: " + balance);
+
+
+
+
+                        Console.WriteLine("\n" + "Balance Transfering Account " + i + " to Account " + (i + 1));
+                        var TransactionHash = TransferEther(web3, account, accountaddress[i + 1], Convert.ToDecimal(accountbalance[i]) * transferNativeBalancePercent / 100);
+                        // check the status of transaction
+                        GetTransactionReceipt(web3, TransactionHash);
+                        // Check balance
+                        //CheckBalance(web3, accountaddress[i + 1]).Wait();
+                        accountbalance[i + 1] = (Convert.ToDecimal(accountbalance[i + 1]) + Convert.ToDecimal(accountbalance[i]) * transferNativeBalancePercent / 100).ToString();
+                        accountbalance[i] = (Convert.ToDecimal(accountbalance[i]) - Convert.ToDecimal(accountbalance[i]) * transferNativeBalancePercent / 100).ToString();
+                        for (int b = 0; b < accountaddress.Length; b++)
+                        {
+                            if (accountaddress[b] == null)
+                            {
+                                break;
+                            }
+                            Console.WriteLine("Account " + (b) + " Balance: " + accountbalance[b]);
+
+                        }
+                    }
+
+
+                }
+            }
+            button1.Text = "Start";
+
+            transferNativeBalancePercent = Convert.ToInt32(nativeTransferPercent.Text);
+            transferNativeBalanceLoop = Convert.ToInt32(nativeTransferLoop.Text);
+
+
+
+
+
+        }
+        public async Task<string> transferTokens(Web3 web3, string senderAddress, string privateKey, string receiverAddress, string contractAddress, UInt64 tokens)
+        {
+            var transactionMessage = new TransferFunction()
+            {
+                FromAddress = senderAddress,
+                To = receiverAddress,
+                AmountToSend = tokens
+
+            };
+            var transferHandler = web3.Eth.GetContractTransactionHandler<TransferFunction>();
+            Task<string> transactionHashTask = transferHandler.SendRequestAsync(contractAddress, transactionMessage);
+            return await transactionHashTask;
         }
 
         static private string TransferEther(Web3 web3, Account account, string toAddress, decimal amount)
@@ -1620,7 +1872,8 @@ namespace AirdropHunter
                         break;
                     }
                     //Console.WriteLine("Account index : " + i + " - Address : " + accountaddress[i] + " - Balance : " + accountbalance[i] + " - Private key : " + accountprivatekey[i]);
-                    var account = new Account(accountprivatekey[i]);
+                    BigInteger chain = BigInteger.Parse(chainID.Text);
+                    var account = new Account(accountprivatekey[i], chain);
                     rpc = rpcURL.Text;
                     var web3 = new Web3(account, rpc);
 
@@ -1678,5 +1931,7 @@ namespace AirdropHunter
             button1.Text = "Start";
 
         }
+
+
     }
 }
