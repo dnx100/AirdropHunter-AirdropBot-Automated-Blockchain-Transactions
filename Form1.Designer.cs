@@ -132,6 +132,9 @@ namespace AirdropHunter
             this.tokenSwapCooldownLabel = new System.Windows.Forms.Label();
             this.tokenTransferCooldown = new System.Windows.Forms.TextBox();
             this.tokenTransferCooldownLabel = new System.Windows.Forms.Label();
+            this.tokenTransferEngine = new System.ComponentModel.BackgroundWorker();
+            this.chainID = new System.Windows.Forms.TextBox();
+            this.chainIDLabel = new System.Windows.Forms.Label();
             this.tabControl3.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -147,7 +150,7 @@ namespace AirdropHunter
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(898, 7);
+            this.button2.Location = new System.Drawing.Point(1061, 7);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(251, 23);
             this.button2.TabIndex = 40;
@@ -1330,12 +1333,35 @@ namespace AirdropHunter
             this.tokenTransferCooldownLabel.TabIndex = 72;
             this.tokenTransferCooldownLabel.Text = "Cooldown (Seconds)";
             // 
+            // tokenTransferEngine
+            // 
+            this.tokenTransferEngine.DoWork += new System.ComponentModel.DoWorkEventHandler(this.tokenTransferEngine_DoWork);
+            // 
+            // chainID
+            // 
+            this.chainID.Location = new System.Drawing.Point(963, 9);
+            this.chainID.Name = "chainID";
+            this.chainID.Size = new System.Drawing.Size(81, 20);
+            this.chainID.TabIndex = 75;
+            this.chainID.Text = "4";
+            // 
+            // chainIDLabel
+            // 
+            this.chainIDLabel.AutoSize = true;
+            this.chainIDLabel.Location = new System.Drawing.Point(907, 12);
+            this.chainIDLabel.Name = "chainIDLabel";
+            this.chainIDLabel.Size = new System.Drawing.Size(45, 13);
+            this.chainIDLabel.TabIndex = 74;
+            this.chainIDLabel.Text = "ChainID";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1791, 299);
+            this.Controls.Add(this.chainID);
             this.Controls.Add(this.transferTokensCheck);
+            this.Controls.Add(this.chainIDLabel);
             this.Controls.Add(this.swapTokensCheck);
             this.Controls.Add(this.transferNativeBalanceCheck);
             this.Controls.Add(this.button1);
@@ -1487,6 +1513,9 @@ namespace AirdropHunter
         private System.Windows.Forms.Label tokenSwapCooldownLabel;
         private System.Windows.Forms.TextBox tokenTransferCooldown;
         private System.Windows.Forms.Label tokenTransferCooldownLabel;
+        private System.ComponentModel.BackgroundWorker tokenTransferEngine;
+        private System.Windows.Forms.TextBox chainID;
+        private System.Windows.Forms.Label chainIDLabel;
     }
 }
 
