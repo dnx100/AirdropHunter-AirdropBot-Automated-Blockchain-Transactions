@@ -21,6 +21,7 @@ namespace AirdropHunter
             InitializeComponent();
         }
 
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -38,6 +39,11 @@ namespace AirdropHunter
         string[] accountaddress = new string[9999];
 
         string[] accountbalance = new string[9999];
+        string[] token1balanceaccount = new string[9999];
+        string[] token2balanceaccount = new string[9999];
+        string[] token3balanceaccount = new string[9999];
+        string[] token4balanceaccount = new string[9999];
+
 
         int transferNativeBalancePercent = 0;
         int transferNativeBalanceLoop = 0;
@@ -56,6 +62,21 @@ namespace AirdropHunter
                 button1.Enabled = false;
                 button3.Enabled = false;
                 rpc = rpcURL.Text;
+                if (privatekeycount == 1)
+                {
+                    Console.WriteLine("Only Token Swap Mode Can Be Used When There Is Only 1 Account.");
+                    swapTokensCheck.Checked = true;
+                    transferNativeBalanceCheck.Enabled = false;
+                    transferTokensCheck.Enabled = false;
+                }
+                if (privatekeycount > 1)
+                {
+                    swapTokensCheck.Enabled = true;
+                    transferNativeBalanceCheck.Enabled = true;
+                    transferTokensCheck.Enabled = true;
+                }
+
+
                 if (privatekeycount == 1)
                 {
                     accountprivatekey[privatekeycount - 1] = privateKeyBox1.Text;
@@ -340,7 +361,19 @@ namespace AirdropHunter
                 button3.Enabled = false;
                 button1.Enabled = false;
                 rpc = rpcURL.Text;
-
+                if (privatekeycount == 1)
+                {
+                    Console.WriteLine("Only Token Swap Mode Can Be Used When There Is Only 1 Account.");
+                    swapTokensCheck.Checked = true;
+                    transferNativeBalanceCheck.Enabled = false;
+                    transferTokensCheck.Enabled = false;
+                }
+                if (privatekeycount > 1)
+                {
+                    swapTokensCheck.Enabled = true;
+                    transferNativeBalanceCheck.Enabled = true;
+                    transferTokensCheck.Enabled = true;
+                }
                 for (int i = 0; i < Convert.ToInt32(accountCount.Text); i++)
                 {
                     accountname = accountaddress[i];
@@ -453,8 +486,7 @@ namespace AirdropHunter
                 enableTransferToken1.Enabled = false; enableTransferToken2.Enabled = false; enableTransferToken3.Enabled = false; enableTransferToken4.Enabled = false;
                 transferContract1.Enabled = false; transferContract2.Enabled = false; transferContract3.Enabled = false; transferContract4.Enabled = false;
                 transferPercentToken1.Enabled = false; transferPercentToken2.Enabled = false; transferPercentToken3.Enabled = false; transferPercentToken4.Enabled = false;
-                transferBackToAccount1.Enabled = false; transferBackToAccount2.Enabled = false; transferBackToAccount3.Enabled = false; transferBackToAccount4.Enabled = false;
-                transferBackToAccount1.Checked = false; transferBackToAccount2.Checked = false; transferBackToAccount3.Checked = false; transferBackToAccount4.Checked = false;
+
                 transferTokenLoopCount.Enabled = false;
                 transferContract1Label.Enabled = false; transferContract2Label.Enabled = false; transferContract3Label.Enabled = false; transferContract4Label.Enabled = false;
                 transferPercentToken1Label.Enabled = false; transferPercentToken2Label.Enabled = false; transferPercentToken3Label.Enabled = false; transferPercentToken4Label.Enabled = false;
@@ -731,21 +763,17 @@ namespace AirdropHunter
             public bool EnableToken1 { get; set; }
             public string TokenContract1 { get; set; }
             public string Token1TransferPercent { get; set; }
-            public bool TransferBackERC20ToFirstAddressToken1 { get; set; }
             public bool EnableToken2 { get; set; }
             public string TokenContract2 { get; set; }
             public string Token2TransferPercent { get; set; }
-            public bool TransferBackERC20ToFirstAddressToken2 { get; set; }
             public bool EnableToken3 { get; set; }
             public string TokenContract3 { get; set; }
             public string Token3TransferPercent { get; set; }
-            public bool TransferBackERC20ToFirstAddressToken3 { get; set; }
             public bool EnableToken4 { get; set; }
             public string TokenContract4 { get; set; }
             public string Token4TransferPercent { get; set; }
             public string TransferTokenLoopCount { get; set; }
             public string TokenTransferCooldown { get; set; }
-            public bool TransferBackERC20ToFirstAddressToken4 { get; set; }
 
 
 
@@ -757,7 +785,6 @@ namespace AirdropHunter
         {
             public string SettingsName { get; set; }
             public string RPC { get; set; }
-            public string ChainID { get; set; }
         }
 
         public class NativeBalanceSettings
@@ -841,7 +868,6 @@ namespace AirdropHunter
             //RPC
 
             rpcURL.Text = appConfig.General.RPC;
-            chainID.Text = appConfig.General.ChainID;
             settingsName.Text = appConfig.General.SettingsName;
 
             if (appConfig.WorkingModeSettings.SeedMode == true && appConfig.WorkingModeSettings.PrivateKeyMode == false)
@@ -1017,52 +1043,20 @@ namespace AirdropHunter
             if (appConfig.WorkingModeSettings.TokenTransferSettings.EnableToken1 == true)
             {
                 enableTransferToken1.Checked = true;
-                if (appConfig.WorkingModeSettings.TokenTransferSettings.TransferBackERC20ToFirstAddressToken1 == true)
-                {
-                    transferBackToAccount1.Checked = true;
 
-                }
-                else
-                {
-                    transferBackToAccount1.Checked = false;
-                }
                 if (appConfig.WorkingModeSettings.TokenTransferSettings.EnableToken2 == true)
                 {
                     enableTransferToken2.Checked = true;
-                    if (appConfig.WorkingModeSettings.TokenTransferSettings.TransferBackERC20ToFirstAddressToken2 == true)
-                    {
-                        transferBackToAccount2.Checked = true;
 
-                    }
-                    else
-                    {
-                        transferBackToAccount2.Checked = false;
-                    }
                     if (appConfig.WorkingModeSettings.TokenTransferSettings.EnableToken3 == true)
                     {
                         enableTransferToken3.Checked = true;
-                        if (appConfig.WorkingModeSettings.TokenTransferSettings.TransferBackERC20ToFirstAddressToken3 == true)
-                        {
-                            transferBackToAccount3.Checked = true;
 
-
-                        }
-                        else
-                        {
-                            transferBackToAccount3.Checked = false;
-                        }
 
                         if (appConfig.WorkingModeSettings.TokenTransferSettings.EnableToken4 == true)
                         {
                             enableTransferToken4.Checked = true;
-                            if (appConfig.WorkingModeSettings.TokenTransferSettings.TransferBackERC20ToFirstAddressToken4 == true)
-                            {
-                                transferBackToAccount4.Checked = true;
-                            }
-                            else
-                            {
-                                transferBackToAccount4.Checked = false;
-                            }
+
                         }
                         else
                         {
@@ -1321,7 +1315,6 @@ namespace AirdropHunter
                 transferContract1.Enabled = true;
                 transferContract1Label.Enabled = true;
                 transferPercentToken1.Enabled = true;
-                transferBackToAccount1.Enabled = true;
                 transferPercentToken1Label.Enabled = true;
                 enableTransferToken2.Enabled = true;
 
@@ -1331,27 +1324,23 @@ namespace AirdropHunter
                 transferContract1.Enabled = false;
                 transferContract1Label.Enabled = false;
                 transferPercentToken1.Enabled = false;
-                transferBackToAccount1.Enabled = false;
-                transferBackToAccount1.Checked = false;
+
                 transferPercentToken1Label.Enabled = false;
                 transferContract2.Enabled = false;
                 transferContract2Label.Enabled = false;
                 transferPercentToken2.Enabled = false;
-                transferBackToAccount2.Enabled = false;
-                transferBackToAccount2.Checked = false;
+
                 transferPercentToken2Label.Enabled = false;
                 transferContract3.Enabled = false;
                 transferContract3Label.Enabled = false;
                 transferPercentToken3.Enabled = false;
-                transferBackToAccount3.Enabled = false;
-                transferBackToAccount3.Checked = false;
+
                 transferPercentToken3Label.Enabled = false;
                 enableTransferToken4.Enabled = false;
                 transferContract4.Enabled = false;
                 transferContract4Label.Enabled = false;
                 transferPercentToken4.Enabled = false;
-                transferBackToAccount4.Enabled = false;
-                transferBackToAccount4.Checked = false;
+
                 transferPercentToken4Label.Enabled = false;
                 enableTransferToken2.Enabled = false;
                 enableTransferToken3.Enabled = false;
@@ -1369,7 +1358,6 @@ namespace AirdropHunter
                 transferContract2.Enabled = true;
                 transferContract2Label.Enabled = true;
                 transferPercentToken2.Enabled = true;
-                transferBackToAccount2.Enabled = true;
                 transferPercentToken2Label.Enabled = true;
                 enableTransferToken3.Enabled = true;
 
@@ -1379,21 +1367,18 @@ namespace AirdropHunter
                 transferContract2.Enabled = false;
                 transferContract2Label.Enabled = false;
                 transferPercentToken2.Enabled = false;
-                transferBackToAccount2.Enabled = false;
-                transferBackToAccount2.Checked = false;
+
                 transferPercentToken2Label.Enabled = false;
                 transferContract3.Enabled = false;
                 transferContract3Label.Enabled = false;
                 transferPercentToken3.Enabled = false;
-                transferBackToAccount3.Enabled = false;
-                transferBackToAccount3.Checked = false;
+
                 transferPercentToken3Label.Enabled = false;
                 enableTransferToken4.Enabled = false;
                 transferContract4.Enabled = false;
                 transferContract4Label.Enabled = false;
                 transferPercentToken4.Enabled = false;
-                transferBackToAccount4.Enabled = false;
-                transferBackToAccount4.Checked = false;
+
                 transferPercentToken4Label.Enabled = false;
                 enableTransferToken3.Enabled = false;
                 enableTransferToken4.Enabled = false;
@@ -1409,7 +1394,6 @@ namespace AirdropHunter
                 transferContract3.Enabled = true;
                 transferContract3Label.Enabled = true;
                 transferPercentToken3.Enabled = true;
-                transferBackToAccount3.Enabled = true;
                 transferPercentToken3Label.Enabled = true;
                 enableTransferToken4.Enabled = true;
 
@@ -1419,15 +1403,13 @@ namespace AirdropHunter
                 transferContract3.Enabled = false;
                 transferContract3Label.Enabled = false;
                 transferPercentToken3.Enabled = false;
-                transferBackToAccount3.Enabled = false;
-                transferBackToAccount3.Checked = false;
+
                 transferPercentToken3Label.Enabled = false;
                 enableTransferToken4.Enabled = false;
                 transferContract4.Enabled = false;
                 transferContract4Label.Enabled = false;
                 transferPercentToken4.Enabled = false;
-                transferBackToAccount4.Enabled = false;
-                transferBackToAccount4.Checked = false;
+
                 transferPercentToken4Label.Enabled = false;
                 enableTransferToken4.Enabled = false;
                 enableTransferToken4.Checked = false;
@@ -1441,7 +1423,7 @@ namespace AirdropHunter
                 transferContract4.Enabled = true;
                 transferContract4Label.Enabled = true;
                 transferPercentToken4.Enabled = true;
-                transferBackToAccount4.Enabled = true;
+
                 transferPercentToken4Label.Enabled = true;
 
             }
@@ -1450,12 +1432,34 @@ namespace AirdropHunter
                 transferContract4.Enabled = false;
                 transferContract4Label.Enabled = false;
                 transferPercentToken4.Enabled = false;
-                transferBackToAccount4.Enabled = false;
                 transferPercentToken4Label.Enabled = false;
-                transferBackToAccount4.Checked = false;
+
             }
         }
 
+        public void wait(int milliseconds)
+        {
+            var timer1 = new System.Windows.Forms.Timer();
+            if (milliseconds == 0 || milliseconds < 0) return;
+
+            // Console.WriteLine(DateTime.Now + " # start wait timer");
+            timer1.Interval = milliseconds;
+            timer1.Enabled = true;
+            timer1.Start();
+
+            timer1.Tick += (s, e) =>
+            {
+                timer1.Enabled = false;
+                timer1.Stop();
+
+
+            };
+
+            while (timer1.Enabled)
+            {
+                Application.DoEvents();
+            }
+        }
         private void button1_Click(object sender, EventArgs e)
         {
 
@@ -1492,7 +1496,7 @@ namespace AirdropHunter
             }
             if (transferTokensCheck.Checked == true)
             {
-                if (nativeBalanceTransferEngine.IsBusy == true)
+                if (tokenTransferEngine.IsBusy == true)
                 {
                     Console.WriteLine("Engine will shutdown at the finish of loop...");
                     button1.Enabled = false;
@@ -1500,7 +1504,7 @@ namespace AirdropHunter
 
                 }
 
-                if (nativeBalanceTransferEngine.IsBusy == false)
+                if (tokenTransferEngine.IsBusy == false)
                 {
                     Console.Clear();
                     Console.WriteLine("Airdrop Hunter Bot Started");
@@ -1514,12 +1518,6 @@ namespace AirdropHunter
 
 
                     tokenTransferEngine.RunWorkerAsync();
-
-
-
-
-
-
 
                 }
             }
@@ -1550,7 +1548,6 @@ namespace AirdropHunter
 
 
         }
-
         [Function("balanceOf", "uint256")]
         public class BalanceOfFunction : FunctionMessage
         {
@@ -1566,41 +1563,12 @@ namespace AirdropHunter
             [Parameter("uint256", "_value", 2)]
             public BigInteger TokenAmount { get; set; }
         }
-        [Event("Transfer")]
-        public class TransferEventDTO : IEventDTO
-        {
-            [Parameter("address", "_from", 1, true)]
-            public string From { get; set; }
-
-            [Parameter("address", "_to", 2, true)]
-            public string To { get; set; }
-
-            [Parameter("uint256", "_value", 3, false)]
-            public BigInteger Value { get; set; }
-        }
-        [FunctionOutput]
-        public class BalanceOfOutputDTO : IFunctionOutputDTO
-        {
-            [Parameter("uint256", "balance", 1)]
-            public BigInteger Balance { get; set; }
-        }
-        [FunctionOutput]
-        public class BalanceOfOutputMultipleDTO : IFunctionOutputDTO
-        {
-            [Parameter("uint256", "balance1", 1)]
-            public BigInteger Balance1 { get; set; }
-
-            [Parameter("uint256", "balance2", 2)]
-            public BigInteger Balance2 { get; set; }
-
-            [Parameter("uint256", "balance3", 3)]
-            public BigInteger Balance3 { get; set; }
-        }
 
         private async void tokenTransferEngine_DoWork(object sender, DoWorkEventArgs e)
         {
             Config appConfig = JsonConvert.DeserializeObject<Config>(File.ReadAllText(@Path.GetDirectoryName(Application.ExecutablePath) + "\\" + settingsName.Text + ".json"));
             int contractCount = 0;
+            int loopcount = Convert.ToInt32(transferTokenLoopCount.Text);
             if (enableTransferToken1.Enabled == true)
             {
                 contractCount = 1;
@@ -1619,177 +1587,142 @@ namespace AirdropHunter
                 }
             }
 
+            string contract = "";
+            string trasferpercent = "100";
 
-            for (int loop = 0; loop < contractCount; loop++)
+            for (int loop = 0; loop < loopcount; loop++)
             {
-                if (button1.Text == "Stopping")
+                for (int contractloop = 0; contractloop < contractCount; contractloop++)
                 {
-                    button1.Text = "Start";
-                    button1.Enabled = true;
-                    break;
 
-                }
-                for (int i = 0; i < privatekeycount; i++)
-                {
                     if (button1.Text == "Stopping")
                     {
                         button1.Text = "Start";
                         button1.Enabled = true;
                         break;
+
                     }
-                    //Console.WriteLine("Account index : " + i + " - Address : " + accountaddress[i] + " - Balance : " + accountbalance[i] + " - Private key : " + accountprivatekey[i]);
-                    BigInteger chain = BigInteger.Parse(chainID.Text);
-                    var account = new Account(accountprivatekey[i], chain);
 
-                    rpc = rpcURL.Text;
-                    var web3 = new Web3(account, rpc);
-
-
-
-
-                    if (i + 1 == privatekeycount)
+                    if (contractloop == 0)
                     {
-                        // Check balance
-                        //CheckBalance(web3, accountaddress[0]).Wait();
-                        // Transfer ether from account to 0xa2271e783f3D469e94C4bFc099E8d7913cD99612
+                        contract = transferContract1.Text;
+                        trasferpercent = transferPercentToken1.Text;
+                    }
+                    if (contractloop == 1)
+                    {
+                        contract = transferContract2.Text;
+                        trasferpercent = transferPercentToken2.Text;
 
-                        Console.WriteLine("\n" + "Token Balance Transfering Account " + i + " to Account 0");
 
-                        var balanceOfFunctionMessage = new BalanceOfFunction()
+                    }
+                    if (contractloop == 2)
+                    {
+                        contract = transferContract3.Text;
+                        trasferpercent = transferPercentToken3.Text;
+
+
+                    }
+                    if (contractloop == 3)
+                    {
+                        contract = transferContract4.Text;
+                        trasferpercent = transferPercentToken4.Text;
+
+
+                    }
+
+
+                    for (int i = 0; i < privatekeycount; i++)
+                    {
+                        if (button1.Text == "Stopping")
                         {
-                            Owner = account.Address,
-                        };
+                            button1.Text = "Start";
+                            button1.Enabled = true;
+                            break;
+                        }
+                        var account = new Account(accountprivatekey[i]);
+                        rpc = rpcURL.Text;
+                        var web3 = new Web3(account, rpc);
 
-                        var balanceHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
-
-                        var balance = await balanceHandler.QueryAsync<BigInteger>(transferContract1.Text, balanceOfFunctionMessage);
-
-                        Console.WriteLine("Account " + i + " Token Balance: " + balance);
-
-                        var receiverAddress = accountaddress[0];
-                        var transferHandler = web3.Eth.GetContractTransactionHandler<TransferFunction>();
-
-                        var transfer = new TransferFunction()
+                        if (i + 1 == privatekeycount)
                         {
-                            To = receiverAddress,
-                            TokenAmount = balance
-                        };
 
-                        var transactionTransferReceipt =
-                            await transferHandler.SendRequestAndWaitForReceiptAsync(transferContract1.Text, transfer);
+                            Console.WriteLine("\n" + "Token Balance Transfering Account " + i + " to Account 0");
 
-                        Console.WriteLine("Transaction hash transfer is: " + transactionTransferReceipt.TransactionHash);
-
-                        balance = await balanceHandler.QueryAsync<BigInteger>(transferContract1.Text, balanceOfFunctionMessage);
-
-                        Console.WriteLine("Account 0 Token Balance: " + balance);
-
-
-
-
-
-
-                        var TransactionHash = TransferEther(web3, account, accountaddress[0], Convert.ToDecimal(accountbalance[i]) * transferNativeBalancePercent / 100);
-
-                        // check the status of transaction
-                        GetTransactionReceipt(web3, TransactionHash);
-                        accountbalance[0] = (Convert.ToDecimal(accountbalance[0]) + Convert.ToDecimal(accountbalance[i]) * transferNativeBalancePercent / 100).ToString();
-                        accountbalance[i] = (Convert.ToDecimal(accountbalance[i]) - Convert.ToDecimal(accountbalance[i]) * transferNativeBalancePercent / 100).ToString();
-                        for (int b = 0; b < accountaddress.Length; b++)
-                        {
-                            if (accountaddress[b] == null)
+                            var balanceOfSender = new BalanceOfFunction()
                             {
-                                break;
-                            }
-                            Console.WriteLine("Account " + (b) + " Balance: " + accountbalance[b]);
+                                Owner = account.Address,
+                            };
+
+                            var balanceSenderHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
+                            var balanceSender = await balanceSenderHandler.QueryAsync<BigInteger>(contract, balanceOfSender);
+                            Console.WriteLine("Account " + i + " Token Balance: " + balanceSender);
+                            var receiverAddress = accountaddress[0];
+                            var transferHandler = web3.Eth.GetContractTransactionHandler<TransferFunction>();
+                            int balance = Convert.ToInt32(balanceSender) * Convert.ToInt32(trasferpercent) / 100;
+                            var transfer = new TransferFunction()
+                            {
+                                To = receiverAddress,
+                                TokenAmount = balance
+                            };
+                            var transactionReceipt = await transferHandler.SendRequestAndWaitForReceiptAsync(contract, transfer);
+
+
+                            var balanceOfReceiver = new BalanceOfFunction()
+                            {
+                                Owner = accountaddress[0],
+                            };
+
+                            var balanceReceiverHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
+                            var balanceReceiver = await balanceReceiverHandler.QueryAsync<BigInteger>(contract, balanceOfReceiver);
+                            Console.WriteLine("Transaction is Successful " + transactionReceipt + "Account 0 Token Balance: " + balanceReceiver);
 
                         }
-                        // Check balance
-                        //CheckBalance(web3, accountaddress[i + 1]).Wait();
-                    }
-                    else
-                    {
-                        // Check balance
-                        //CheckBalance(web3, accountaddress[i + 1]).Wait();
-                        // Transfer ether from account to 0xa2271e783f3D469e94C4bFc099E8d7913cD99612
-                        Console.WriteLine("\n" + "Token Balance Transfering Account " + i + " to Account " + (i + 1));
-
-                        var balanceOfFunctionMessage = new BalanceOfFunction()
+                        else
                         {
-                            Owner = account.Address,
-                        };
 
-                        var balanceHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
+                            Console.WriteLine("\n" + "Token Balance Transfering Account " + i + " to Account " + (i + 1));
 
-                        var balance = await balanceHandler.QueryAsync<BigInteger>(transferContract1.Text, balanceOfFunctionMessage);
-
-                        Console.WriteLine("Account " + i + " Token Balance: " + balance);
-
-                        var receiverAddress = accountaddress[i + 1];
-                        var transferHandler = web3.Eth.GetContractTransactionHandler<TransferFunction>();
-
-                        var transfer = new TransferFunction()
-                        {
-                            To = receiverAddress,
-                            TokenAmount = balance
-                        };
-
-                        var transactionTransferReceipt =
-                            await transferHandler.SendRequestAndWaitForReceiptAsync(transferContract1.Text, transfer);
-
-                        Console.WriteLine("Transaction hash transfer is: " + transactionTransferReceipt.TransactionHash);
-
-                        balance = await balanceHandler.QueryAsync<BigInteger>(transferContract1.Text, balanceOfFunctionMessage);
-
-                        Console.WriteLine("Account " + (i + 1) + " Token Balance: " + balance);
-
-
-
-
-                        Console.WriteLine("\n" + "Balance Transfering Account " + i + " to Account " + (i + 1));
-                        var TransactionHash = TransferEther(web3, account, accountaddress[i + 1], Convert.ToDecimal(accountbalance[i]) * transferNativeBalancePercent / 100);
-                        // check the status of transaction
-                        GetTransactionReceipt(web3, TransactionHash);
-                        // Check balance
-                        //CheckBalance(web3, accountaddress[i + 1]).Wait();
-                        accountbalance[i + 1] = (Convert.ToDecimal(accountbalance[i + 1]) + Convert.ToDecimal(accountbalance[i]) * transferNativeBalancePercent / 100).ToString();
-                        accountbalance[i] = (Convert.ToDecimal(accountbalance[i]) - Convert.ToDecimal(accountbalance[i]) * transferNativeBalancePercent / 100).ToString();
-                        for (int b = 0; b < accountaddress.Length; b++)
-                        {
-                            if (accountaddress[b] == null)
+                            var balanceOfSender = new BalanceOfFunction()
                             {
-                                break;
-                            }
-                            Console.WriteLine("Account " + (b) + " Balance: " + accountbalance[b]);
+                                Owner = account.Address,
+                            };
 
+                            var balanceSenderHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
+                            var balanceSender = await balanceSenderHandler.QueryAsync<BigInteger>(contract, balanceOfSender);
+                            Console.WriteLine("Account " + i + " Token Balance: " + balanceSender);
+                            var receiverAddress = accountaddress[i + 1];
+                            var transferHandler = web3.Eth.GetContractTransactionHandler<TransferFunction>();
+                            int balance = Convert.ToInt32(balanceSender) * Convert.ToInt32(trasferpercent) / 100;
+                            var transfer = new TransferFunction()
+                            {
+                                To = receiverAddress,
+                                TokenAmount = balance
+                            };
+                            var transactionReceipt = await transferHandler.SendRequestAndWaitForReceiptAsync(contract, transfer);
+
+
+                            var balanceOfReceiver = new BalanceOfFunction()
+                            {
+                                Owner = accountaddress[i + 1],
+                            };
+
+                            var balanceReceiverHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
+                            var balanceReceiver = await balanceReceiverHandler.QueryAsync<BigInteger>(contract, balanceOfReceiver);
+                            Console.WriteLine("Transaction is Successful " + transactionReceipt + "Account " + (i + 1) + " Token Balance: " + balanceReceiver);
                         }
+
+                        wait(Convert.ToInt32(tokenTransferCooldown.Text) * 1000);
+
                     }
-
-
                 }
+
             }
+
+
             button1.Text = "Start";
 
-            transferNativeBalancePercent = Convert.ToInt32(nativeTransferPercent.Text);
-            transferNativeBalanceLoop = Convert.ToInt32(nativeTransferLoop.Text);
 
 
-
-
-
-        }
-        public async Task<string> transferTokens(Web3 web3, string senderAddress, string privateKey, string receiverAddress, string contractAddress, UInt64 tokens)
-        {
-            var transactionMessage = new TransferFunction()
-            {
-                FromAddress = senderAddress,
-                To = receiverAddress,
-                AmountToSend = tokens
-
-            };
-            var transferHandler = web3.Eth.GetContractTransactionHandler<TransferFunction>();
-            Task<string> transactionHashTask = transferHandler.SendRequestAsync(contractAddress, transactionMessage);
-            return await transactionHashTask;
         }
 
         static private string TransferEther(Web3 web3, Account account, string toAddress, decimal amount)
@@ -1870,9 +1803,8 @@ namespace AirdropHunter
                         button1.Enabled = true;
                         break;
                     }
-                    //Console.WriteLine("Account index : " + i + " - Address : " + accountaddress[i] + " - Balance : " + accountbalance[i] + " - Private key : " + accountprivatekey[i]);
-                    BigInteger chain = BigInteger.Parse(chainID.Text);
-                    var account = new Account(accountprivatekey[i], chain);
+
+                    var account = new Account(accountprivatekey[i]);
                     rpc = rpcURL.Text;
                     var web3 = new Web3(account, rpc);
 
@@ -1923,6 +1855,8 @@ namespace AirdropHunter
 
                         }
                     }
+
+                    wait(Convert.ToInt32(nativeTransferCooldown.Text) * 1000);
 
 
                 }
