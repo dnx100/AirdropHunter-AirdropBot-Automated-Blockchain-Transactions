@@ -521,6 +521,7 @@ namespace AirdropHunter
             this.button4.TabIndex = 35;
             this.button4.Text = "Save / Export";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // tabControl2
             // 
