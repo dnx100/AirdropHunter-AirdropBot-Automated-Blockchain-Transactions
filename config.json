@@ -1,8 +1,7 @@
 {
   "General": {
     "SettingsName": "config",
-    "RPC": "",
-    "ChainID": "5"
+    "RPC": ""
   },
   "WorkingModeSettings": {
     "PrivateKeyMode": "true",
@@ -18,19 +17,15 @@
       "EnableToken1": "true",
       "TokenContract1": "",
       "Token1TransferPercent": "100",
-      "TransferBackERC20ToFirstAddressToken1": "true",
       "EnableToken2": "false",
       "TokenContract2": "",
       "Token2TransferPercent": "100",
-      "TransferBackERC20ToFirstAddressToken2": "true",
       "EnableToken3": "false",
       "TokenContract3": "",
       "Token3TransferPercent": "100",
-      "TransferBackERC20ToFirstAddressToken3": "true",
       "EnableToken4": "false",
       "TokenContract4": "",
       "Token4TransferPercent": "100",
-      "TransferBackERC20ToFirstAddressToken4": "true",
       "TokenTransferCooldown": "60",
       "TransferTokenLoopCount": "20"
     },
