@@ -59,11 +59,14 @@ namespace AirdropHunter
             this.button4 = new System.Windows.Forms.Button();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.nativeTransferPercent = new System.Windows.Forms.TextBox();
+            this.nativeTransferCooldown = new System.Windows.Forms.TextBox();
+            this.nativeTransferCooldownLabel = new System.Windows.Forms.Label();
             this.nativeTransferPercentLabel = new System.Windows.Forms.Label();
             this.nativeTransferLoop = new System.Windows.Forms.TextBox();
             this.nativeTransferLoopLabel = new System.Windows.Forms.Label();
             this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.tokenSwapCooldown = new System.Windows.Forms.TextBox();
+            this.tokenSwapCooldownLabel = new System.Windows.Forms.Label();
             this.swapTokenSlippage = new System.Windows.Forms.TextBox();
             this.swapTokenSlippageLabel = new System.Windows.Forms.Label();
             this.swapBackNativeToken4 = new System.Windows.Forms.CheckBox();
@@ -95,10 +98,8 @@ namespace AirdropHunter
             this.swapContract2Label = new System.Windows.Forms.Label();
             this.swapContract2 = new System.Windows.Forms.TextBox();
             this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.transferBackToAccount4 = new System.Windows.Forms.CheckBox();
-            this.transferBackToAccount3 = new System.Windows.Forms.CheckBox();
-            this.transferBackToAccount2 = new System.Windows.Forms.CheckBox();
-            this.transferBackToAccount1 = new System.Windows.Forms.CheckBox();
+            this.tokenTransferCooldown = new System.Windows.Forms.TextBox();
+            this.tokenTransferCooldownLabel = new System.Windows.Forms.Label();
             this.enableTransferToken4 = new System.Windows.Forms.CheckBox();
             this.transferPercentToken4Label = new System.Windows.Forms.Label();
             this.enableTransferToken3 = new System.Windows.Forms.CheckBox();
@@ -126,15 +127,8 @@ namespace AirdropHunter
             this.transferNativeBalanceCheck = new System.Windows.Forms.CheckBox();
             this.swapTokensCheck = new System.Windows.Forms.CheckBox();
             this.transferTokensCheck = new System.Windows.Forms.CheckBox();
-            this.nativeTransferCooldown = new System.Windows.Forms.TextBox();
-            this.nativeTransferCooldownLabel = new System.Windows.Forms.Label();
-            this.tokenSwapCooldown = new System.Windows.Forms.TextBox();
-            this.tokenSwapCooldownLabel = new System.Windows.Forms.Label();
-            this.tokenTransferCooldown = new System.Windows.Forms.TextBox();
-            this.tokenTransferCooldownLabel = new System.Windows.Forms.Label();
             this.tokenTransferEngine = new System.ComponentModel.BackgroundWorker();
-            this.chainID = new System.Windows.Forms.TextBox();
-            this.chainIDLabel = new System.Windows.Forms.Label();
+            this.nativeTransferPercent = new System.Windows.Forms.TextBox();
             this.tabControl3.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -150,7 +144,7 @@ namespace AirdropHunter
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(1061, 7);
+            this.button2.Location = new System.Drawing.Point(898, 7);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(251, 23);
             this.button2.TabIndex = 40;
@@ -554,14 +548,24 @@ namespace AirdropHunter
             this.tabPage1.Text = "Transfer Native Balance Settings";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // nativeTransferPercent
+            // nativeTransferCooldown
             // 
-            this.nativeTransferPercent.Enabled = false;
-            this.nativeTransferPercent.Location = new System.Drawing.Point(127, 13);
-            this.nativeTransferPercent.Name = "nativeTransferPercent";
-            this.nativeTransferPercent.Size = new System.Drawing.Size(52, 20);
-            this.nativeTransferPercent.TabIndex = 47;
-            this.nativeTransferPercent.Text = "10";
+            this.nativeTransferCooldown.Enabled = false;
+            this.nativeTransferCooldown.Location = new System.Drawing.Point(127, 65);
+            this.nativeTransferCooldown.Name = "nativeTransferCooldown";
+            this.nativeTransferCooldown.Size = new System.Drawing.Size(52, 20);
+            this.nativeTransferCooldown.TabIndex = 49;
+            this.nativeTransferCooldown.Text = "20";
+            // 
+            // nativeTransferCooldownLabel
+            // 
+            this.nativeTransferCooldownLabel.AutoSize = true;
+            this.nativeTransferCooldownLabel.Enabled = false;
+            this.nativeTransferCooldownLabel.Location = new System.Drawing.Point(16, 69);
+            this.nativeTransferCooldownLabel.Name = "nativeTransferCooldownLabel";
+            this.nativeTransferCooldownLabel.Size = new System.Drawing.Size(105, 13);
+            this.nativeTransferCooldownLabel.TabIndex = 48;
+            this.nativeTransferCooldownLabel.Text = "Cooldown (Seconds)";
             // 
             // nativeTransferPercentLabel
             // 
@@ -580,7 +584,6 @@ namespace AirdropHunter
             this.nativeTransferLoop.Name = "nativeTransferLoop";
             this.nativeTransferLoop.Size = new System.Drawing.Size(52, 20);
             this.nativeTransferLoop.TabIndex = 45;
-            this.nativeTransferLoop.Text = "20";
             // 
             // nativeTransferLoopLabel
             // 
@@ -634,6 +637,25 @@ namespace AirdropHunter
             this.tabPage7.Text = "Token Swap Settings";
             this.tabPage7.UseVisualStyleBackColor = true;
             // 
+            // tokenSwapCooldown
+            // 
+            this.tokenSwapCooldown.Enabled = false;
+            this.tokenSwapCooldown.Location = new System.Drawing.Point(419, 143);
+            this.tokenSwapCooldown.Name = "tokenSwapCooldown";
+            this.tokenSwapCooldown.Size = new System.Drawing.Size(52, 20);
+            this.tokenSwapCooldown.TabIndex = 51;
+            this.tokenSwapCooldown.Text = "20";
+            // 
+            // tokenSwapCooldownLabel
+            // 
+            this.tokenSwapCooldownLabel.AutoSize = true;
+            this.tokenSwapCooldownLabel.Enabled = false;
+            this.tokenSwapCooldownLabel.Location = new System.Drawing.Point(308, 147);
+            this.tokenSwapCooldownLabel.Name = "tokenSwapCooldownLabel";
+            this.tokenSwapCooldownLabel.Size = new System.Drawing.Size(105, 13);
+            this.tokenSwapCooldownLabel.TabIndex = 50;
+            this.tokenSwapCooldownLabel.Text = "Cooldown (Seconds)";
+            // 
             // swapTokenSlippage
             // 
             this.swapTokenSlippage.Enabled = false;
@@ -641,7 +663,6 @@ namespace AirdropHunter
             this.swapTokenSlippage.Name = "swapTokenSlippage";
             this.swapTokenSlippage.Size = new System.Drawing.Size(52, 20);
             this.swapTokenSlippage.TabIndex = 43;
-            this.swapTokenSlippage.Text = "4";
             // 
             // swapTokenSlippageLabel
             // 
@@ -738,7 +759,6 @@ namespace AirdropHunter
             this.swapPercentToken4.Name = "swapPercentToken4";
             this.swapPercentToken4.Size = new System.Drawing.Size(67, 20);
             this.swapPercentToken4.TabIndex = 33;
-            this.swapPercentToken4.Text = "5";
             // 
             // enableSwapToken2
             // 
@@ -769,7 +789,6 @@ namespace AirdropHunter
             this.swapPercentToken3.Name = "swapPercentToken3";
             this.swapPercentToken3.Size = new System.Drawing.Size(67, 20);
             this.swapPercentToken3.TabIndex = 31;
-            this.swapPercentToken3.Text = "5";
             // 
             // enableSwapToken1
             // 
@@ -800,7 +819,6 @@ namespace AirdropHunter
             this.swapPercentToken2.Name = "swapPercentToken2";
             this.swapPercentToken2.Size = new System.Drawing.Size(67, 20);
             this.swapPercentToken2.TabIndex = 29;
-            this.swapPercentToken2.Text = "5";
             // 
             // swapPercentToken1Label
             // 
@@ -819,7 +837,6 @@ namespace AirdropHunter
             this.swapTokenLoopCount.Name = "swapTokenLoopCount";
             this.swapTokenLoopCount.Size = new System.Drawing.Size(52, 20);
             this.swapTokenLoopCount.TabIndex = 25;
-            this.swapTokenLoopCount.Text = "4";
             // 
             // swapPercentToken1
             // 
@@ -828,7 +845,6 @@ namespace AirdropHunter
             this.swapPercentToken1.Name = "swapPercentToken1";
             this.swapPercentToken1.Size = new System.Drawing.Size(67, 20);
             this.swapPercentToken1.TabIndex = 27;
-            this.swapPercentToken1.Text = "5";
             // 
             // swapTokenLoopCountLabel
             // 
@@ -883,7 +899,6 @@ namespace AirdropHunter
             this.routerContractBox.Name = "routerContractBox";
             this.routerContractBox.Size = new System.Drawing.Size(455, 20);
             this.routerContractBox.TabIndex = 12;
-            this.routerContractBox.Text = "0xc79d9D0d9fB83EdbE8dEDc990d01Db36B32E6AC7";
             // 
             // swapContract3
             // 
@@ -935,10 +950,6 @@ namespace AirdropHunter
             // 
             this.tabPage6.Controls.Add(this.tokenTransferCooldown);
             this.tabPage6.Controls.Add(this.tokenTransferCooldownLabel);
-            this.tabPage6.Controls.Add(this.transferBackToAccount4);
-            this.tabPage6.Controls.Add(this.transferBackToAccount3);
-            this.tabPage6.Controls.Add(this.transferBackToAccount2);
-            this.tabPage6.Controls.Add(this.transferBackToAccount1);
             this.tabPage6.Controls.Add(this.enableTransferToken4);
             this.tabPage6.Controls.Add(this.transferPercentToken4Label);
             this.tabPage6.Controls.Add(this.enableTransferToken3);
@@ -969,49 +980,24 @@ namespace AirdropHunter
             this.tabPage6.Text = "Token Transfer Settings";
             this.tabPage6.UseVisualStyleBackColor = true;
             // 
-            // transferBackToAccount4
+            // tokenTransferCooldown
             // 
-            this.transferBackToAccount4.AutoSize = true;
-            this.transferBackToAccount4.Enabled = false;
-            this.transferBackToAccount4.Location = new System.Drawing.Point(769, 117);
-            this.transferBackToAccount4.Name = "transferBackToAccount4";
-            this.transferBackToAccount4.Size = new System.Drawing.Size(162, 17);
-            this.transferBackToAccount4.TabIndex = 71;
-            this.transferBackToAccount4.Text = "Transfer Tokens Back Again";
-            this.transferBackToAccount4.UseVisualStyleBackColor = true;
+            this.tokenTransferCooldown.Enabled = false;
+            this.tokenTransferCooldown.Location = new System.Drawing.Point(417, 144);
+            this.tokenTransferCooldown.Name = "tokenTransferCooldown";
+            this.tokenTransferCooldown.Size = new System.Drawing.Size(52, 20);
+            this.tokenTransferCooldown.TabIndex = 73;
+            this.tokenTransferCooldown.Text = "20";
             // 
-            // transferBackToAccount3
+            // tokenTransferCooldownLabel
             // 
-            this.transferBackToAccount3.AutoSize = true;
-            this.transferBackToAccount3.Enabled = false;
-            this.transferBackToAccount3.Location = new System.Drawing.Point(769, 91);
-            this.transferBackToAccount3.Name = "transferBackToAccount3";
-            this.transferBackToAccount3.Size = new System.Drawing.Size(162, 17);
-            this.transferBackToAccount3.TabIndex = 70;
-            this.transferBackToAccount3.Text = "Transfer Tokens Back Again";
-            this.transferBackToAccount3.UseVisualStyleBackColor = true;
-            // 
-            // transferBackToAccount2
-            // 
-            this.transferBackToAccount2.AutoSize = true;
-            this.transferBackToAccount2.Enabled = false;
-            this.transferBackToAccount2.Location = new System.Drawing.Point(769, 65);
-            this.transferBackToAccount2.Name = "transferBackToAccount2";
-            this.transferBackToAccount2.Size = new System.Drawing.Size(162, 17);
-            this.transferBackToAccount2.TabIndex = 69;
-            this.transferBackToAccount2.Text = "Transfer Tokens Back Again";
-            this.transferBackToAccount2.UseVisualStyleBackColor = true;
-            // 
-            // transferBackToAccount1
-            // 
-            this.transferBackToAccount1.AutoSize = true;
-            this.transferBackToAccount1.Enabled = false;
-            this.transferBackToAccount1.Location = new System.Drawing.Point(769, 38);
-            this.transferBackToAccount1.Name = "transferBackToAccount1";
-            this.transferBackToAccount1.Size = new System.Drawing.Size(162, 17);
-            this.transferBackToAccount1.TabIndex = 68;
-            this.transferBackToAccount1.Text = "Transfer Tokens Back Again";
-            this.transferBackToAccount1.UseVisualStyleBackColor = true;
+            this.tokenTransferCooldownLabel.AutoSize = true;
+            this.tokenTransferCooldownLabel.Enabled = false;
+            this.tokenTransferCooldownLabel.Location = new System.Drawing.Point(306, 148);
+            this.tokenTransferCooldownLabel.Name = "tokenTransferCooldownLabel";
+            this.tokenTransferCooldownLabel.Size = new System.Drawing.Size(105, 13);
+            this.tokenTransferCooldownLabel.TabIndex = 72;
+            this.tokenTransferCooldownLabel.Text = "Cooldown (Seconds)";
             // 
             // enableTransferToken4
             // 
@@ -1054,7 +1040,6 @@ namespace AirdropHunter
             this.transferPercentToken4.Name = "transferPercentToken4";
             this.transferPercentToken4.Size = new System.Drawing.Size(67, 20);
             this.transferPercentToken4.TabIndex = 63;
-            this.transferPercentToken4.Text = "5";
             // 
             // enableTransferToken2
             // 
@@ -1085,7 +1070,6 @@ namespace AirdropHunter
             this.transferPercentToken3.Name = "transferPercentToken3";
             this.transferPercentToken3.Size = new System.Drawing.Size(67, 20);
             this.transferPercentToken3.TabIndex = 61;
-            this.transferPercentToken3.Text = "5";
             // 
             // enableTransferToken1
             // 
@@ -1116,7 +1100,6 @@ namespace AirdropHunter
             this.transferPercentToken2.Name = "transferPercentToken2";
             this.transferPercentToken2.Size = new System.Drawing.Size(67, 20);
             this.transferPercentToken2.TabIndex = 59;
-            this.transferPercentToken2.Text = "5";
             // 
             // transferPercentToken1Label
             // 
@@ -1135,7 +1118,6 @@ namespace AirdropHunter
             this.transferTokenLoopCount.Name = "transferTokenLoopCount";
             this.transferTokenLoopCount.Size = new System.Drawing.Size(52, 20);
             this.transferTokenLoopCount.TabIndex = 55;
-            this.transferTokenLoopCount.Text = "4";
             // 
             // transferPercentToken1
             // 
@@ -1144,7 +1126,6 @@ namespace AirdropHunter
             this.transferPercentToken1.Name = "transferPercentToken1";
             this.transferPercentToken1.Size = new System.Drawing.Size(67, 20);
             this.transferPercentToken1.TabIndex = 57;
-            this.transferPercentToken1.Text = "5";
             // 
             // transferTokenLoopCountLabel
             // 
@@ -1276,92 +1257,24 @@ namespace AirdropHunter
             this.transferTokensCheck.UseVisualStyleBackColor = true;
             this.transferTokensCheck.CheckedChanged += new System.EventHandler(this.transferTokensCheck_CheckedChanged);
             // 
-            // nativeTransferCooldown
-            // 
-            this.nativeTransferCooldown.Enabled = false;
-            this.nativeTransferCooldown.Location = new System.Drawing.Point(127, 65);
-            this.nativeTransferCooldown.Name = "nativeTransferCooldown";
-            this.nativeTransferCooldown.Size = new System.Drawing.Size(52, 20);
-            this.nativeTransferCooldown.TabIndex = 49;
-            this.nativeTransferCooldown.Text = "60";
-            // 
-            // nativeTransferCooldownLabel
-            // 
-            this.nativeTransferCooldownLabel.AutoSize = true;
-            this.nativeTransferCooldownLabel.Enabled = false;
-            this.nativeTransferCooldownLabel.Location = new System.Drawing.Point(16, 69);
-            this.nativeTransferCooldownLabel.Name = "nativeTransferCooldownLabel";
-            this.nativeTransferCooldownLabel.Size = new System.Drawing.Size(105, 13);
-            this.nativeTransferCooldownLabel.TabIndex = 48;
-            this.nativeTransferCooldownLabel.Text = "Cooldown (Seconds)";
-            // 
-            // tokenSwapCooldown
-            // 
-            this.tokenSwapCooldown.Enabled = false;
-            this.tokenSwapCooldown.Location = new System.Drawing.Point(419, 143);
-            this.tokenSwapCooldown.Name = "tokenSwapCooldown";
-            this.tokenSwapCooldown.Size = new System.Drawing.Size(52, 20);
-            this.tokenSwapCooldown.TabIndex = 51;
-            this.tokenSwapCooldown.Text = "60";
-            // 
-            // tokenSwapCooldownLabel
-            // 
-            this.tokenSwapCooldownLabel.AutoSize = true;
-            this.tokenSwapCooldownLabel.Enabled = false;
-            this.tokenSwapCooldownLabel.Location = new System.Drawing.Point(308, 147);
-            this.tokenSwapCooldownLabel.Name = "tokenSwapCooldownLabel";
-            this.tokenSwapCooldownLabel.Size = new System.Drawing.Size(105, 13);
-            this.tokenSwapCooldownLabel.TabIndex = 50;
-            this.tokenSwapCooldownLabel.Text = "Cooldown (Seconds)";
-            // 
-            // tokenTransferCooldown
-            // 
-            this.tokenTransferCooldown.Enabled = false;
-            this.tokenTransferCooldown.Location = new System.Drawing.Point(417, 144);
-            this.tokenTransferCooldown.Name = "tokenTransferCooldown";
-            this.tokenTransferCooldown.Size = new System.Drawing.Size(52, 20);
-            this.tokenTransferCooldown.TabIndex = 73;
-            this.tokenTransferCooldown.Text = "60";
-            // 
-            // tokenTransferCooldownLabel
-            // 
-            this.tokenTransferCooldownLabel.AutoSize = true;
-            this.tokenTransferCooldownLabel.Enabled = false;
-            this.tokenTransferCooldownLabel.Location = new System.Drawing.Point(306, 148);
-            this.tokenTransferCooldownLabel.Name = "tokenTransferCooldownLabel";
-            this.tokenTransferCooldownLabel.Size = new System.Drawing.Size(105, 13);
-            this.tokenTransferCooldownLabel.TabIndex = 72;
-            this.tokenTransferCooldownLabel.Text = "Cooldown (Seconds)";
-            // 
             // tokenTransferEngine
             // 
             this.tokenTransferEngine.DoWork += new System.ComponentModel.DoWorkEventHandler(this.tokenTransferEngine_DoWork);
             // 
-            // chainID
+            // nativeTransferPercent
             // 
-            this.chainID.Location = new System.Drawing.Point(963, 9);
-            this.chainID.Name = "chainID";
-            this.chainID.Size = new System.Drawing.Size(81, 20);
-            this.chainID.TabIndex = 75;
-            this.chainID.Text = "4";
-            // 
-            // chainIDLabel
-            // 
-            this.chainIDLabel.AutoSize = true;
-            this.chainIDLabel.Location = new System.Drawing.Point(907, 12);
-            this.chainIDLabel.Name = "chainIDLabel";
-            this.chainIDLabel.Size = new System.Drawing.Size(45, 13);
-            this.chainIDLabel.TabIndex = 74;
-            this.chainIDLabel.Text = "ChainID";
+            this.nativeTransferPercent.Enabled = false;
+            this.nativeTransferPercent.Location = new System.Drawing.Point(127, 13);
+            this.nativeTransferPercent.Name = "nativeTransferPercent";
+            this.nativeTransferPercent.Size = new System.Drawing.Size(52, 20);
+            this.nativeTransferPercent.TabIndex = 47;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1791, 299);
-            this.Controls.Add(this.chainID);
             this.Controls.Add(this.transferTokensCheck);
-            this.Controls.Add(this.chainIDLabel);
             this.Controls.Add(this.swapTokensCheck);
             this.Controls.Add(this.transferNativeBalanceCheck);
             this.Controls.Add(this.button1);
@@ -1471,10 +1384,6 @@ namespace AirdropHunter
         private System.Windows.Forms.Label swapContract2Label;
         private System.Windows.Forms.TextBox swapContract2;
         private System.Windows.Forms.TabPage tabPage6;
-        private System.Windows.Forms.CheckBox transferBackToAccount4;
-        private System.Windows.Forms.CheckBox transferBackToAccount3;
-        private System.Windows.Forms.CheckBox transferBackToAccount2;
-        private System.Windows.Forms.CheckBox transferBackToAccount1;
         private System.Windows.Forms.CheckBox enableTransferToken4;
         private System.Windows.Forms.Label transferPercentToken4Label;
         private System.Windows.Forms.CheckBox enableTransferToken3;
@@ -1500,7 +1409,6 @@ namespace AirdropHunter
         private System.Windows.Forms.Button button1;
         private System.ComponentModel.BackgroundWorker nativeBalanceTransferEngine;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TextBox nativeTransferPercent;
         private System.Windows.Forms.Label nativeTransferPercentLabel;
         private System.Windows.Forms.TextBox nativeTransferLoop;
         private System.Windows.Forms.Label nativeTransferLoopLabel;
@@ -1514,8 +1422,7 @@ namespace AirdropHunter
         private System.Windows.Forms.TextBox tokenTransferCooldown;
         private System.Windows.Forms.Label tokenTransferCooldownLabel;
         private System.ComponentModel.BackgroundWorker tokenTransferEngine;
-        private System.Windows.Forms.TextBox chainID;
-        private System.Windows.Forms.Label chainIDLabel;
+        private System.Windows.Forms.TextBox nativeTransferPercent;
     }
 }
 
