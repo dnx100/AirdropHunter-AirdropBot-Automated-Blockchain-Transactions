@@ -1,10 +1,14 @@
+using Microsoft.Scripting.Utils;
 using Nethereum.ABI.FunctionEncoding.Attributes;
 using Nethereum.Contracts;
 using Nethereum.HdWallet;
+using Nethereum.Uniswap.Contracts.UniswapV2Pair.ContractDefinition;
+using Nethereum.Uniswap.Contracts.UniswapV2Router02;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Numerics;
@@ -512,6 +516,7 @@ namespace AirdropHunter
                 enableSwapToken1.Enabled = true; routerContractBox.Enabled = true; routerContractBoxLabel.Enabled = true;
                 swapTokenSlippage.Enabled = true; swapTokenLoopCount.Enabled = true; swapTokenSlippageLabel.Enabled = true; swapTokenLoopCountLabel.Enabled = true;
                 tokenSwapCooldown.Enabled = true; tokenSwapCooldownLabel.Enabled = true;
+                nativePairContract.Enabled = true; nativePairContractLabel.Enabled = true;
             }
             if (swapTokensCheck.Checked == false)
             {
@@ -529,6 +534,8 @@ namespace AirdropHunter
                 enableSwapToken3.Checked = false;
                 enableSwapToken4.Checked = false;
                 tokenSwapCooldown.Enabled = false; tokenSwapCooldownLabel.Enabled = false;
+                nativePairContract.Enabled = false; nativePairContractLabel.Enabled = false;
+
 
             }
 
@@ -832,6 +839,7 @@ namespace AirdropHunter
         {
             public bool SwapToken { get; set; }
             public string RouterContract { get; set; }
+            public string NativeTokenContract { get; set; }
             public string SlippagePercent { get; set; }
             public string TokenSwapCooldown { get; set; }
             public string SwapTokenLoopCount { get; set; }
@@ -870,92 +878,12 @@ namespace AirdropHunter
             rpcURL.Text = appConfig.General.RPC;
             settingsName.Text = appConfig.General.SettingsName;
 
-            if (appConfig.WorkingModeSettings.SeedMode == true && appConfig.WorkingModeSettings.PrivateKeyMode == false)
-            {
-                seedMode.Checked = true;
-            }
-            if (appConfig.WorkingModeSettings.SeedMode == false && appConfig.WorkingModeSettings.PrivateKeyMode == true)
-            {
-                privateKeyMode.Checked = true;
-            }
-            if (appConfig.WorkingModeSettings.SeedMode == true && appConfig.WorkingModeSettings.PrivateKeyMode == true)
-            {
-                privateKeyMode.Checked = false;
-                seedMode.Checked = false;
-                MessageBox.Show("Working Mode Settings Cannot Import." + "\n" +
-                    "'PrivateKeyMode' And 'SeedMode' Parameters Cannot Be 'true' Both.");
-            }
-            if (appConfig.WorkingModeSettings.SeedMode == false && appConfig.WorkingModeSettings.PrivateKeyMode == false)
-            {
-                privateKeyMode.Checked = false;
-                seedMode.Checked = false;
-                MessageBox.Show("'PrivateKeyMode' or 'SeedMode' Parameter Must Set To 'true'.");
-            }
-
-            //TransferNativeBalanceCheck
-            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == true && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == false && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == false)
-            {
-                transferNativeBalanceCheck.Checked = true;
-            }
-
-            //SwapTokenCheck
-            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == false && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == true && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == false)
-            {
-                swapTokensCheck.Checked = true;
-            }
-
-
-            //TransferTokenCheck
-            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == false && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == false && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == true)
-            {
-                transferTokensCheck.Checked = true;
-            }
-
-            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == false && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == true && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == true)
-            {
-                transferTokensCheck.Checked = false;
-                swapTokensCheck.Checked = false;
-                transferNativeBalanceCheck.Checked = false;
-                MessageBox.Show("Working Mode Settings Cannot Import." + "\n" +
-                    "Select One Of Parameters 'TransferNativeBalance' or 'TransferToken' or 'SwapToken' to 'true'.");
-            }
-            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == true && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == true && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == true)
-            {
-                transferTokensCheck.Checked = false;
-                swapTokensCheck.Checked = false;
-                transferNativeBalanceCheck.Checked = false;
-                MessageBox.Show("Working Mode Settings Cannot Import." + "\n" +
-                    "Select One Of Parameters 'TransferNativeBalance' or 'TransferToken' or 'SwapToken' to 'true'.");
-            }
-            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == true && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == false && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == true)
-            {
-                transferTokensCheck.Checked = false;
-                swapTokensCheck.Checked = false;
-                transferNativeBalanceCheck.Checked = false;
-                MessageBox.Show("Working Mode Settings Cannot Import." + "\n" +
-                    "Select One Of Parameters 'TransferNativeBalance' or 'TransferToken' or 'SwapToken' to 'true'.");
-            }
-            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == true && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == true && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == false)
-            {
-                transferTokensCheck.Checked = false;
-                swapTokensCheck.Checked = false;
-                transferNativeBalanceCheck.Checked = false;
-                MessageBox.Show("Working Mode Settings Cannot Import." + "\n" +
-                    "Select One Of Parameters 'TransferNativeBalance' or 'TransferToken' or 'SwapToken' to 'true'.");
-            }
-            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == false && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == false && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == false)
-            {
-                transferTokensCheck.Checked = false;
-                swapTokensCheck.Checked = false;
-                transferNativeBalanceCheck.Checked = false;
-                MessageBox.Show("Working Mode Settings Cannot Import." + "\n" +
-                    "Select One Of Parameters 'TransferNativeBalance' or 'TransferToken' or 'SwapToken' to 'true'.");
-            }
-
 
 
             //TokenSwapSettings
             routerContractBox.Text = appConfig.WorkingModeSettings.TokenSwapSettings.RouterContract;
+            nativePairContract.Text = appConfig.WorkingModeSettings.TokenSwapSettings.NativeTokenContract;
+
             if (appConfig.WorkingModeSettings.TokenSwapSettings.EnableToken1 == true)
             {
                 enableSwapToken1.Checked = true;
@@ -1159,6 +1087,99 @@ namespace AirdropHunter
             privateKeyBox4.Text = appConfig.PrivateKeyModeSettings.PrivateKeyBox4;
             privateKeyBox5.Text = appConfig.PrivateKeyModeSettings.PrivateKeyBox5;
             privateKeyBox6.Text = appConfig.PrivateKeyModeSettings.PrivateKeyBox6;
+            if (appConfig.WorkingModeSettings.SeedMode == true && appConfig.WorkingModeSettings.PrivateKeyMode == false)
+            {
+                privateKeyMode.Checked = false;
+
+                seedMode.Checked = true;
+            }
+            if (appConfig.WorkingModeSettings.SeedMode == false && appConfig.WorkingModeSettings.PrivateKeyMode == true)
+            {
+                seedMode.Checked = false;
+
+                privateKeyMode.Checked = true;
+            }
+            if (appConfig.WorkingModeSettings.SeedMode == true && appConfig.WorkingModeSettings.PrivateKeyMode == true)
+            {
+                privateKeyMode.Checked = false;
+                seedMode.Checked = false;
+                MessageBox.Show("Working Mode Settings Cannot Import." + "\n" +
+                    "'PrivateKeyMode' And 'SeedMode' Parameters Cannot Be 'true' Both.");
+            }
+            if (appConfig.WorkingModeSettings.SeedMode == false && appConfig.WorkingModeSettings.PrivateKeyMode == false)
+            {
+                privateKeyMode.Checked = false;
+                seedMode.Checked = false;
+                MessageBox.Show("'PrivateKeyMode' or 'SeedMode' Parameter Must Set To 'true'.");
+            }
+
+            //TransferNativeBalanceCheck
+            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == true && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == false && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == false)
+            {
+
+                transferNativeBalanceCheck.Checked = true;
+
+
+            }
+
+            //SwapTokenCheck
+            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == false && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == true && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == false)
+            {
+                transferNativeBalanceCheck.Checked = false;
+                transferTokensCheck.Checked = false;
+                swapTokensCheck.Checked = true;
+
+            }
+
+
+            //TransferTokenCheck
+            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == false && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == false && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == true)
+            {
+
+                transferTokensCheck.Checked = true;
+            }
+
+            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == false && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == true && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == true)
+            {
+                transferTokensCheck.Checked = false;
+                swapTokensCheck.Checked = false;
+                transferNativeBalanceCheck.Checked = false;
+                MessageBox.Show("Working Mode Settings Cannot Import." + "\n" +
+                    "Select One Of Parameters 'TransferNativeBalance' or 'TransferToken' or 'SwapToken' to 'true'.");
+            }
+            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == true && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == true && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == true)
+            {
+                transferTokensCheck.Checked = false;
+                swapTokensCheck.Checked = false;
+                transferNativeBalanceCheck.Checked = false;
+                MessageBox.Show("Working Mode Settings Cannot Import." + "\n" +
+                    "Select One Of Parameters 'TransferNativeBalance' or 'TransferToken' or 'SwapToken' to 'true'.");
+            }
+            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == true && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == false && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == true)
+            {
+                transferTokensCheck.Checked = false;
+                swapTokensCheck.Checked = false;
+                transferNativeBalanceCheck.Checked = false;
+                MessageBox.Show("Working Mode Settings Cannot Import." + "\n" +
+                    "Select One Of Parameters 'TransferNativeBalance' or 'TransferToken' or 'SwapToken' to 'true'.");
+            }
+            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == true && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == true && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == false)
+            {
+                transferTokensCheck.Checked = false;
+                swapTokensCheck.Checked = false;
+                transferNativeBalanceCheck.Checked = false;
+                MessageBox.Show("Working Mode Settings Cannot Import." + "\n" +
+                    "Select One Of Parameters 'TransferNativeBalance' or 'TransferToken' or 'SwapToken' to 'true'.");
+            }
+            if (appConfig.WorkingModeSettings.NativeBalanceSettings.TransferNativeBalance == false && appConfig.WorkingModeSettings.TokenSwapSettings.SwapToken == false && appConfig.WorkingModeSettings.TokenTransferSettings.TransferToken == false)
+            {
+                transferTokensCheck.Checked = false;
+                swapTokensCheck.Checked = false;
+                transferNativeBalanceCheck.Checked = false;
+                MessageBox.Show("Working Mode Settings Cannot Import." + "\n" +
+                    "Select One Of Parameters 'TransferNativeBalance' or 'TransferToken' or 'SwapToken' to 'true'.");
+            }
+
 
 
         }
@@ -1523,7 +1544,7 @@ namespace AirdropHunter
             }
             if (swapTokensCheck.Checked == true)
             {
-                if (nativeBalanceTransferEngine.IsBusy == true)
+                if (tokenSwapEngine.IsBusy == true)
                 {
                     Console.WriteLine("Engine will shutdown at the finish of loop...");
                     button1.Enabled = false;
@@ -1531,7 +1552,7 @@ namespace AirdropHunter
 
                 }
 
-                if (nativeBalanceTransferEngine.IsBusy == false)
+                if (tokenSwapEngine.IsBusy == false)
                 {
                     Console.Clear();
                     Console.WriteLine("Airdrop Hunter Bot Started");
@@ -1543,6 +1564,7 @@ namespace AirdropHunter
                     }
 
                     if (swapTokensCheck.Checked == true) { Console.WriteLine("Swap Tokens Mode Selected"); Console.WriteLine("Bot Will Swap Tokens. You Can Define Token Contracts Up To 4. Set Router Contract, Percent And Slippage Correctly. Router Contract Differs For Every Network. This Process Will Take As Long As The Number Of Loop Count."); }
+                    tokenSwapEngine.RunWorkerAsync();
                 }
             }
 
@@ -1564,166 +1586,6 @@ namespace AirdropHunter
             public BigInteger TokenAmount { get; set; }
         }
 
-        private async void tokenTransferEngine_DoWork(object sender, DoWorkEventArgs e)
-        {
-            Config appConfig = JsonConvert.DeserializeObject<Config>(File.ReadAllText(@Path.GetDirectoryName(Application.ExecutablePath) + "\\" + settingsName.Text + ".json"));
-            int contractCount = 0;
-            int loopcount = Convert.ToInt32(transferTokenLoopCount.Text);
-            if (enableTransferToken1.Enabled == true)
-            {
-                contractCount = 1;
-                if (enableTransferToken2.Enabled == true)
-                {
-                    contractCount = 2;
-                    if (enableTransferToken3.Enabled == true)
-                    {
-                        contractCount = 3;
-                        if (enableTransferToken4.Enabled == true)
-                        {
-                            contractCount = 4;
-
-                        }
-                    }
-                }
-            }
-
-            string contract = "";
-            string trasferpercent = "100";
-
-            for (int loop = 0; loop < loopcount; loop++)
-            {
-                for (int contractloop = 0; contractloop < contractCount; contractloop++)
-                {
-
-                    if (button1.Text == "Stopping")
-                    {
-                        button1.Text = "Start";
-                        button1.Enabled = true;
-                        break;
-
-                    }
-
-                    if (contractloop == 0)
-                    {
-                        contract = transferContract1.Text;
-                        trasferpercent = transferPercentToken1.Text;
-                    }
-                    if (contractloop == 1)
-                    {
-                        contract = transferContract2.Text;
-                        trasferpercent = transferPercentToken2.Text;
-
-
-                    }
-                    if (contractloop == 2)
-                    {
-                        contract = transferContract3.Text;
-                        trasferpercent = transferPercentToken3.Text;
-
-
-                    }
-                    if (contractloop == 3)
-                    {
-                        contract = transferContract4.Text;
-                        trasferpercent = transferPercentToken4.Text;
-
-
-                    }
-
-
-                    for (int i = 0; i < privatekeycount; i++)
-                    {
-                        if (button1.Text == "Stopping")
-                        {
-                            button1.Text = "Start";
-                            button1.Enabled = true;
-                            break;
-                        }
-                        var account = new Account(accountprivatekey[i]);
-                        rpc = rpcURL.Text;
-                        var web3 = new Web3(account, rpc);
-
-                        if (i + 1 == privatekeycount)
-                        {
-
-                            Console.WriteLine("\n" + "Token Balance Transfering Account " + i + " to Account 0");
-
-                            var balanceOfSender = new BalanceOfFunction()
-                            {
-                                Owner = account.Address,
-                            };
-
-                            var balanceSenderHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
-                            var balanceSender = await balanceSenderHandler.QueryAsync<BigInteger>(contract, balanceOfSender);
-                            Console.WriteLine("Account " + i + " Token Balance: " + balanceSender);
-                            var receiverAddress = accountaddress[0];
-                            var transferHandler = web3.Eth.GetContractTransactionHandler<TransferFunction>();
-                            int balance = Convert.ToInt32(balanceSender) * Convert.ToInt32(trasferpercent) / 100;
-                            var transfer = new TransferFunction()
-                            {
-                                To = receiverAddress,
-                                TokenAmount = balance
-                            };
-                            var transactionReceipt = await transferHandler.SendRequestAndWaitForReceiptAsync(contract, transfer);
-
-
-                            var balanceOfReceiver = new BalanceOfFunction()
-                            {
-                                Owner = accountaddress[0],
-                            };
-
-                            var balanceReceiverHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
-                            var balanceReceiver = await balanceReceiverHandler.QueryAsync<BigInteger>(contract, balanceOfReceiver);
-                            Console.WriteLine("Transaction is Successful " + transactionReceipt + "Account 0 Token Balance: " + balanceReceiver);
-
-                        }
-                        else
-                        {
-
-                            Console.WriteLine("\n" + "Token Balance Transfering Account " + i + " to Account " + (i + 1));
-
-                            var balanceOfSender = new BalanceOfFunction()
-                            {
-                                Owner = account.Address,
-                            };
-
-                            var balanceSenderHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
-                            var balanceSender = await balanceSenderHandler.QueryAsync<BigInteger>(contract, balanceOfSender);
-                            Console.WriteLine("Account " + i + " Token Balance: " + balanceSender);
-                            var receiverAddress = accountaddress[i + 1];
-                            var transferHandler = web3.Eth.GetContractTransactionHandler<TransferFunction>();
-                            int balance = Convert.ToInt32(balanceSender) * Convert.ToInt32(trasferpercent) / 100;
-                            var transfer = new TransferFunction()
-                            {
-                                To = receiverAddress,
-                                TokenAmount = balance
-                            };
-                            var transactionReceipt = await transferHandler.SendRequestAndWaitForReceiptAsync(contract, transfer);
-
-
-                            var balanceOfReceiver = new BalanceOfFunction()
-                            {
-                                Owner = accountaddress[i + 1],
-                            };
-
-                            var balanceReceiverHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
-                            var balanceReceiver = await balanceReceiverHandler.QueryAsync<BigInteger>(contract, balanceOfReceiver);
-                            Console.WriteLine("Transaction is Successful " + transactionReceipt + "Account " + (i + 1) + " Token Balance: " + balanceReceiver);
-                        }
-
-                        wait(Convert.ToInt32(tokenTransferCooldown.Text) * 1000);
-
-                    }
-                }
-
-            }
-
-
-            button1.Text = "Start";
-
-
-
-        }
 
         static private string TransferEther(Web3 web3, Account account, string toAddress, decimal amount)
         {
@@ -1864,7 +1726,327 @@ namespace AirdropHunter
             button1.Text = "Start";
 
         }
+        private async void tokenTransferEngine_DoWork(object sender, DoWorkEventArgs e)
+        {
 
+
+            Config appConfig = JsonConvert.DeserializeObject<Config>(File.ReadAllText(@Path.GetDirectoryName(Application.ExecutablePath) + "\\" + settingsName.Text + ".json"));
+            int contractCount = 0;
+            int loopcount = Convert.ToInt32(transferTokenLoopCount.Text);
+            if (enableTransferToken1.Enabled == true)
+            {
+                contractCount = 1;
+                if (enableTransferToken2.Enabled == true)
+                {
+                    contractCount = 2;
+                    if (enableTransferToken3.Enabled == true)
+                    {
+                        contractCount = 3;
+                        if (enableTransferToken4.Enabled == true)
+                        {
+                            contractCount = 4;
+
+                        }
+                    }
+                }
+            }
+
+            string contract = "";
+            string trasferpercent = "100";
+
+            for (int loop = 0; loop < loopcount; loop++)
+            {
+                for (int contractloop = 0; contractloop < contractCount; contractloop++)
+                {
+
+                    if (button1.Text == "Stopping")
+                    {
+                        button1.Text = "Start";
+                        button1.Enabled = true;
+                        break;
+
+                    }
+
+                    if (contractloop == 0)
+                    {
+                        contract = transferContract1.Text;
+                        trasferpercent = transferPercentToken1.Text;
+                    }
+                    if (contractloop == 1)
+                    {
+                        contract = transferContract2.Text;
+                        trasferpercent = transferPercentToken2.Text;
+
+
+                    }
+                    if (contractloop == 2)
+                    {
+                        contract = transferContract3.Text;
+                        trasferpercent = transferPercentToken3.Text;
+
+
+                    }
+                    if (contractloop == 3)
+                    {
+                        contract = transferContract4.Text;
+                        trasferpercent = transferPercentToken4.Text;
+
+
+                    }
+
+
+                    for (int i = 0; i < privatekeycount; i++)
+                    {
+                        if (button1.Text == "Stopping")
+                        {
+                            button1.Text = "Start";
+                            button1.Enabled = true;
+                            break;
+                        }
+                        var account = new Account(accountprivatekey[i]);
+                        rpc = rpcURL.Text;
+                        var web3 = new Web3(account, rpc);
+
+
+
+
+
+
+                        if (i + 1 == privatekeycount)
+                        {
+
+                            Console.WriteLine("\n" + "Token Balance Transfering Account " + i + " to Account 0");
+
+                            var balanceOfSender = new BalanceOfFunction()
+                            {
+                                Owner = account.Address,
+                            };
+
+                            var balanceSenderHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
+                            var balanceSender = await balanceSenderHandler.QueryAsync<BigInteger>(contract, balanceOfSender);
+                            Console.WriteLine("Account " + i + " Token Balance: " + balanceSender);
+                            var receiverAddress = accountaddress[0];
+                            var transferHandler = web3.Eth.GetContractTransactionHandler<TransferFunction>();
+                            int balance = Convert.ToInt32(balanceSender) * Convert.ToInt32(trasferpercent) / 100;
+                            var transfer = new TransferFunction()
+                            {
+                                To = receiverAddress,
+                                TokenAmount = balance
+                            };
+                            var transactionReceipt = await transferHandler.SendRequestAndWaitForReceiptAsync(contract, transfer);
+
+
+                            var balanceOfReceiver = new BalanceOfFunction()
+                            {
+                                Owner = accountaddress[0],
+                            };
+
+                            var balanceReceiverHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
+                            var balanceReceiver = await balanceReceiverHandler.QueryAsync<BigInteger>(contract, balanceOfReceiver);
+                            Console.WriteLine("Transaction is Successful " + transactionReceipt + "Account 0 Token Balance: " + balanceReceiver);
+
+                        }
+                        else
+                        {
+
+                            Console.WriteLine("\n" + "Token Balance Transfering Account " + i + " to Account " + (i + 1));
+
+                            var balanceOfSender = new BalanceOfFunction()
+                            {
+                                Owner = account.Address,
+                            };
+
+                            var balanceSenderHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
+                            var balanceSender = await balanceSenderHandler.QueryAsync<BigInteger>(contract, balanceOfSender);
+                            Console.WriteLine("Account " + i + " Token Balance: " + balanceSender);
+                            var receiverAddress = accountaddress[i + 1];
+                            var transferHandler = web3.Eth.GetContractTransactionHandler<TransferFunction>();
+                            int balance = Convert.ToInt32(balanceSender) * Convert.ToInt32(trasferpercent) / 100;
+                            var transfer = new TransferFunction()
+                            {
+                                To = receiverAddress,
+                                TokenAmount = balance
+                            };
+                            var transactionReceipt = await transferHandler.SendRequestAndWaitForReceiptAsync(contract, transfer);
+
+
+                            var balanceOfReceiver = new BalanceOfFunction()
+                            {
+                                Owner = accountaddress[i + 1],
+                            };
+
+                            var balanceReceiverHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
+                            var balanceReceiver = await balanceReceiverHandler.QueryAsync<BigInteger>(contract, balanceOfReceiver);
+                            Console.WriteLine("Transaction is Successful " + transactionReceipt + "Account " + (i + 1) + " Token Balance: " + balanceReceiver);
+                        }
+
+                        wait(Convert.ToInt32(tokenTransferCooldown.Text) * 1000);
+
+                    }
+                }
+
+            }
+
+
+            button1.Text = "Start";
+
+
+
+        }
+
+
+        public async Task swapUniswapV2(Web3 web3, string _accountAddress, string _routerAddress, string _nativePairContract, string _swapTokenContract, BigInteger _swapAmount)
+        {
+            var myAddress = _accountAddress;
+            var routerV2Address = _routerAddress;
+            var uniswapV2Router02Service = new UniswapV2Router02Service(web3, routerV2Address);
+            var nativePair = _nativePairContract;
+            var targetPair = _swapTokenContract;
+            var swapTargetService = new Nethereum.StandardTokenEIP20.StandardTokenService(web3, targetPair);
+
+            var path = new List<string> { nativePair, targetPair };
+            var amountEth = Web3.Convert.ToWei(_swapAmount);
+
+            var amounts = await uniswapV2Router02Service.GetAmountsOutQueryAsync(amountEth, path);
+
+            var deadline = DateTimeOffset.Now.AddMinutes(15).ToUnixTimeSeconds();
+
+            var swapEthForExactTokens = new Nethereum.Uniswap.Contracts.UniswapV2Router02.ContractDefinition.SwapExactETHForTokensFunction()
+            {
+                AmountOutMin = amounts[1],
+                Path = path,
+                Deadline = deadline,
+                To = myAddress,
+                AmountToSend = amountEth
+            };
+
+            var balanceOriginal = await swapTargetService.BalanceOfQueryAsync(myAddress);
+
+
+            var swapReceipt = await uniswapV2Router02Service.SwapExactETHForTokensRequestAndWaitForReceiptAsync(swapEthForExactTokens);
+            var swapLog = swapReceipt.Logs.DecodeAllEvents<SwapEventDTO>();
+            var transferLog = swapReceipt.Logs.DecodeAllEvents<TransferEventDTO>();
+
+            var balanceNew = await swapTargetService.BalanceOfQueryAsync(myAddress);
+
+            Assert.Equals(swapLog[0].Event.Amount0Out, balanceNew - balanceOriginal);
+
+        }
+
+
+
+
+
+        private async void tokenSwapEngine_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Config appConfig = JsonConvert.DeserializeObject<Config>(File.ReadAllText(@Path.GetDirectoryName(Application.ExecutablePath) + "\\" + settingsName.Text + ".json"));
+            int contractCount = 0;
+            int loopcount = Convert.ToInt32(swapTokenLoopCount.Text);
+            if (enableSwapToken1.Enabled == true)
+            {
+                contractCount = 1;
+                if (enableSwapToken2.Enabled == true)
+                {
+                    contractCount = 2;
+                    if (enableSwapToken3.Enabled == true)
+                    {
+                        contractCount = 3;
+                        if (enableSwapToken4.Enabled == true)
+                        {
+                            contractCount = 4;
+
+                        }
+                    }
+                }
+            }
+
+            string contract = "";
+            string swappercent = "100";
+
+
+            for (int loop = 0; loop < loopcount; loop++)
+            {
+                for (int contractloop = 0; contractloop < contractCount; contractloop++)
+                {
+
+                    if (button1.Text == "Stopping")
+                    {
+                        button1.Text = "Start";
+                        button1.Enabled = true;
+                        break;
+
+                    }
+
+                    if (contractloop == 0)
+                    {
+                        contract = swapContract1.Text;
+                        swappercent = swapPercentToken1.Text;
+                    }
+                    if (contractloop == 1)
+                    {
+                        contract = swapContract2.Text;
+                        swappercent = swapPercentToken2.Text;
+
+
+                    }
+                    if (contractloop == 2)
+                    {
+                        contract = swapContract3.Text;
+                        swappercent = swapPercentToken3.Text;
+
+
+                    }
+                    if (contractloop == 3)
+                    {
+                        contract = swapContract4.Text;
+                        swappercent = swapPercentToken4.Text;
+
+
+                    }
+
+                    for (int i = 0; i < privatekeycount; i++)
+                    {
+                        if (button1.Text == "Stopping")
+                        {
+                            button1.Text = "Start";
+                            button1.Enabled = true;
+                            break;
+                        }
+                        var account = new Account(accountprivatekey[i]);
+                        rpc = rpcURL.Text;
+                        var web3 = new Web3(account, rpc);
+                        var balanceOfSender = new BalanceOfFunction()
+                        {
+                            Owner = account.Address,
+                        };
+
+                        var balanceSenderHandler = web3.Eth.GetContractQueryHandler<BalanceOfFunction>();
+                        var balanceSender = await balanceSenderHandler.QueryAsync<BigInteger>(contract, balanceOfSender);
+
+                        await swapUniswapV2(web3, account.Address, routerContractBox.Text, nativePairContract.Text, contract, balanceSender);
+
+                        if (swapBackNativeToken1.Checked == true)
+                        {
+                            await swapUniswapV2(web3, account.Address, routerContractBox.Text, contract, nativePairContract.Text, balanceSender);
+
+                        }
+
+                        Console.WriteLine("\n" + "Token Swap Completed");
+                        wait(Convert.ToInt32(tokenSwapCooldown.Text) * 1000);
+
+                    }
+
+
+
+                }
+
+            }
+
+
+            button1.Text = "Start";
+
+
+        }
         private void button4_Click(object sender, EventArgs e)
         {
             if (File.Exists(settingsName.Text + ".json"))
@@ -1996,6 +2178,7 @@ namespace AirdropHunter
             TextWriter sw = new StreamWriter(fs);
             sw.WriteLine(
                 "{" + "\n" +
+                "    \"General\": {" + "\n" +
                 "    \"SettingsName\": \"" + settingsName.Text + "\"," + "\n" +
                 "    \"RPC\": \"" + rpcURL.Text + "\"" + "\n" +
                 "  }," + "\n" +
@@ -2028,6 +2211,7 @@ namespace AirdropHunter
                 "    \"TokenSwapSettings\": {" + "\n" +
                 "      \"SwapToken\": \"" + _tokenswap + "\"," + "\n" +
                 "      \"RouterContract\": \"" + routerContractBox.Text + "\"," + "\n" +
+                "      \"NativeTokenContract\": \"" + nativePairContract.Text + "\"," + "\n" +
                 "      \"SlippagePercent\": \"" + swapTokenSlippage.Text + "\"," + "\n" +
                 "      \"SwapTokenLoopCount\": \"" + swapTokenLoopCount.Text + "\"," + "\n" +
                 "      \"EnableToken1\": \"" + _swapenabletoken1 + "\"," + "\n" +
@@ -2105,6 +2289,7 @@ namespace AirdropHunter
                 "    \"TokenSwapSettings\": {" + "\n" +
                 "      \"SwapToken\": \"" + _tokenswap + "\"," + "\n" +
                 "      \"RouterContract\": \"" + routerContractBox.Text + "\"," + "\n" +
+                "      \"NativeTokenContract\": \"" + nativePairContract.Text + "\"," + "\n" +
                 "      \"SlippagePercent\": \"" + swapTokenSlippage.Text + "\"," + "\n" +
                 "      \"SwapTokenLoopCount\": \"" + swapTokenLoopCount.Text + "\"," + "\n" +
                 "      \"EnableToken1\": \"" + _swapenabletoken1 + "\"," + "\n" +
@@ -2150,5 +2335,7 @@ namespace AirdropHunter
 
 
         }
+
+
     }
 }
