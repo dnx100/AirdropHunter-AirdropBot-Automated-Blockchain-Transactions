@@ -61,6 +61,7 @@ namespace AirdropHunter
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.nativeTransferCooldown = new System.Windows.Forms.TextBox();
             this.nativeTransferCooldownLabel = new System.Windows.Forms.Label();
+            this.nativeTransferPercent = new System.Windows.Forms.TextBox();
             this.nativeTransferPercentLabel = new System.Windows.Forms.Label();
             this.nativeTransferLoop = new System.Windows.Forms.TextBox();
             this.nativeTransferLoopLabel = new System.Windows.Forms.Label();
@@ -128,7 +129,9 @@ namespace AirdropHunter
             this.swapTokensCheck = new System.Windows.Forms.CheckBox();
             this.transferTokensCheck = new System.Windows.Forms.CheckBox();
             this.tokenTransferEngine = new System.ComponentModel.BackgroundWorker();
-            this.nativeTransferPercent = new System.Windows.Forms.TextBox();
+            this.tokenSwapEngine = new System.ComponentModel.BackgroundWorker();
+            this.nativePairContractLabel = new System.Windows.Forms.Label();
+            this.nativePairContract = new System.Windows.Forms.TextBox();
             this.tabControl3.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -568,6 +571,14 @@ namespace AirdropHunter
             this.nativeTransferCooldownLabel.TabIndex = 48;
             this.nativeTransferCooldownLabel.Text = "Cooldown (Seconds)";
             // 
+            // nativeTransferPercent
+            // 
+            this.nativeTransferPercent.Enabled = false;
+            this.nativeTransferPercent.Location = new System.Drawing.Point(127, 13);
+            this.nativeTransferPercent.Name = "nativeTransferPercent";
+            this.nativeTransferPercent.Size = new System.Drawing.Size(52, 20);
+            this.nativeTransferPercent.TabIndex = 47;
+            // 
             // nativeTransferPercentLabel
             // 
             this.nativeTransferPercentLabel.AutoSize = true;
@@ -598,6 +609,8 @@ namespace AirdropHunter
             // 
             // tabPage7
             // 
+            this.tabPage7.Controls.Add(this.nativePairContractLabel);
+            this.tabPage7.Controls.Add(this.nativePairContract);
             this.tabPage7.Controls.Add(this.tokenSwapCooldown);
             this.tabPage7.Controls.Add(this.tokenSwapCooldownLabel);
             this.tabPage7.Controls.Add(this.swapTokenSlippage);
@@ -877,7 +890,7 @@ namespace AirdropHunter
             // 
             this.routerContractBoxLabel.AutoSize = true;
             this.routerContractBoxLabel.Enabled = false;
-            this.routerContractBoxLabel.Location = new System.Drawing.Point(95, 15);
+            this.routerContractBoxLabel.Location = new System.Drawing.Point(3, 14);
             this.routerContractBoxLabel.Name = "routerContractBoxLabel";
             this.routerContractBoxLabel.Size = new System.Drawing.Size(82, 13);
             this.routerContractBoxLabel.TabIndex = 11;
@@ -896,9 +909,9 @@ namespace AirdropHunter
             // routerContractBox
             // 
             this.routerContractBox.Enabled = false;
-            this.routerContractBox.Location = new System.Drawing.Point(185, 12);
+            this.routerContractBox.Location = new System.Drawing.Point(93, 11);
             this.routerContractBox.Name = "routerContractBox";
-            this.routerContractBox.Size = new System.Drawing.Size(455, 20);
+            this.routerContractBox.Size = new System.Drawing.Size(378, 20);
             this.routerContractBox.TabIndex = 12;
             // 
             // swapContract3
@@ -1262,13 +1275,27 @@ namespace AirdropHunter
             // 
             this.tokenTransferEngine.DoWork += new System.ComponentModel.DoWorkEventHandler(this.tokenTransferEngine_DoWork);
             // 
-            // nativeTransferPercent
+            // tokenSwapEngine
             // 
-            this.nativeTransferPercent.Enabled = false;
-            this.nativeTransferPercent.Location = new System.Drawing.Point(127, 13);
-            this.nativeTransferPercent.Name = "nativeTransferPercent";
-            this.nativeTransferPercent.Size = new System.Drawing.Size(52, 20);
-            this.nativeTransferPercent.TabIndex = 47;
+            this.tokenSwapEngine.DoWork += new System.ComponentModel.DoWorkEventHandler(this.tokenSwapEngine_DoWork);
+            // 
+            // nativePairContractLabel
+            // 
+            this.nativePairContractLabel.AutoSize = true;
+            this.nativePairContractLabel.Enabled = false;
+            this.nativePairContractLabel.Location = new System.Drawing.Point(477, 14);
+            this.nativePairContractLabel.Name = "nativePairContractLabel";
+            this.nativePairContractLabel.Size = new System.Drawing.Size(102, 13);
+            this.nativePairContractLabel.TabIndex = 52;
+            this.nativePairContractLabel.Text = "Native Pair Contract";
+            // 
+            // nativePairContract
+            // 
+            this.nativePairContract.Enabled = false;
+            this.nativePairContract.Location = new System.Drawing.Point(584, 10);
+            this.nativePairContract.Name = "nativePairContract";
+            this.nativePairContract.Size = new System.Drawing.Size(405, 20);
+            this.nativePairContract.TabIndex = 53;
             // 
             // Form1
             // 
@@ -1424,6 +1451,9 @@ namespace AirdropHunter
         private System.Windows.Forms.Label tokenTransferCooldownLabel;
         private System.ComponentModel.BackgroundWorker tokenTransferEngine;
         private System.Windows.Forms.TextBox nativeTransferPercent;
+        private System.ComponentModel.BackgroundWorker tokenSwapEngine;
+        private System.Windows.Forms.Label nativePairContractLabel;
+        private System.Windows.Forms.TextBox nativePairContract;
     }
 }
 
