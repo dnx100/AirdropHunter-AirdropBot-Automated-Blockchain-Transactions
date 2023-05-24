@@ -1,7 +1,7 @@
 {
   "General": {
     "SettingsName": "config",
-    "RPC": "https://eth.getblock.io/65471353-26f9-4e5d-9b63-70d7af943e09/goerli/"
+    "RPC": "https://ethereum-goerli.publicnode.com	"
   },
   "WorkingModeSettings": {
     "PrivateKeyMode": "true",
