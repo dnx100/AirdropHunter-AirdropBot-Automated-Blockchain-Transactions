@@ -1,7 +1,7 @@
 {
   "General": {
     "SettingsName": "config",
-    "RPC": "https://ethereum-goerli.publicnode.com	"
+    "RPC": "https://ethereum-goerli.publicnode.com"
   },
   "WorkingModeSettings": {
     "PrivateKeyMode": "true",
