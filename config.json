@@ -1,7 +1,7 @@
 {
   "General": {
     "SettingsName": "config",
-    "RPC": ""
+    "RPC": "https://eth.getblock.io/65471353-26f9-4e5d-9b63-70d7af943e09/goerli/"
   },
   "WorkingModeSettings": {
     "PrivateKeyMode": "true",
@@ -9,14 +9,14 @@
     "NativeBalanceSettings": {
       "TransferNativeBalance": "false",
       "NativeTransferPercent": "20",
-      "NativeTransferCooldown": "60",
+      "NativeTransferCooldown": "10",
       "NativeTransferLoop": "10"
     },
     "TokenTransferSettings": {
-      "TransferERC20": "false",
-      "EnableToken1": "true",
-      "TokenContract1": "",
-      "Token1TransferPercent": "100",
+      "TransferToken": "false",
+      "EnableToken1": "false",
+      "TokenContract1": "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
+      "Token1TransferPercent": "50",
       "EnableToken2": "false",
       "TokenContract2": "",
       "Token2TransferPercent": "100",
@@ -26,37 +26,38 @@
       "EnableToken4": "false",
       "TokenContract4": "",
       "Token4TransferPercent": "100",
-      "TokenTransferCooldown": "60",
+      "TokenTransferCooldown": "10",
       "TransferTokenLoopCount": "20"
     },
     "TokenSwapSettings": {
-      "SwapToken": "true",
-      "RouterContract": "",
+      "SwapToken": "false",
+      "RouterContract": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
+      "NativeTokenContract": "0xB4FBF271143F4FBf7B91A5ded31805e42b2208d6",
       "SlippagePercent": "1",
       "SwapTokenLoopCount": "5",
-      "EnableToken1": "true",
-      "TokenContract1": "",
+      "EnableToken1": "false",
+      "TokenContract1": "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
       "Token1SwapPercent": "10",
-      "SwapBackERC20ToNativeToken1": "true",
+      "SwapBackERC20ToNativeToken1": "false",
       "EnableToken2": "false",
       "TokenContract2": "",
       "Token2SwapPercent": "10",
-      "SwapBackERC20ToNativeToken2": "true",
+      "SwapBackERC20ToNativeToken2": "false",
       "EnableToken3": "false",
       "TokenContract3": "",
       "Token3SwapPercent": "10",
-      "SwapBackERC20ToNativeToken3": "true",
+      "SwapBackERC20ToNativeToken3": "false",
       "EnableToken4": "false",
       "TokenContract4": "",
       "Token4SwapPercent": "10",
-      "TokenSwapCooldown": "60",
-      "SwapBackERC20ToNativeToken4": "true"
+      "TokenSwapCooldown": "10",
+      "SwapBackERC20ToNativeToken4": "false"
     }
   },
   "PrivateKeyModeSettings": {
-    "EnablePrivateKey1": "true",
+    "EnablePrivateKey1": "false",
     "PrivateKeyBox1": "",
-    "EnablePrivateKey2": "true",
+    "EnablePrivateKey2": "false",
     "PrivateKeyBox2": "",
     "EnablePrivateKey3": "false",
     "PrivateKeyBox3": "",
@@ -70,6 +71,6 @@
   "SeedModeSettings": {
     "Seed": "apple apple apple apple apple apple apple apple apple apple apple apple",
     "ExtraWord": "",
-    "AccountCount": "4"
+    "AccountCount": "1"
   }
 }
