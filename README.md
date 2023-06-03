@@ -1,7 +1,7 @@
 # AirdropHunter-Automated-Blockchain-Transactions
 Automated coin transfers, token swaps, token transfers and logical transaction routes. Ultimate solution for EVM chains.
 
-![AirdropHunter](https://github.com/dnx100/AirdropHunter-Automated-Blockchain-Transactions/blob/main/ss/airdrophuntertransfernative.gif)
+![AirdropHunter](https://github.com/dnx100/AirdropHunter-AirdropBot-Automated-Blockchain-Transactions/blob/main/ss/airdrophuntertransfernative.gif)
 
 I have reviewed numerous accounts that have received airdrops on the Optimism and Arbitrum networks.
 When I saw that I could program these routes, I decided to write this program.
@@ -14,11 +14,11 @@ Made special for upcoming zkSync Era and Polygon zkEVM airdrops.
 TO-DO
 * NonEVM Chains
 * Github Config Generator
-![AirdropHunter](https://github.com/dnx100/AirdropHunter-Automated-Blockchain-Transactions/blob/main/ss/airdrophunter1.jpg)
-![AirdropHunter](https://github.com/dnx100/AirdropHunter-Automated-Blockchain-Transactions/blob/main/ss/airdrophunter2.jpg)
-![AirdropHunter](https://github.com/dnx100/AirdropHunter-Automated-Blockchain-Transactions/blob/main/ss/airdrophunter3.jpg)
-![AirdropHunter](https://github.com/dnx100/AirdropHunter-Automated-Blockchain-Transactions/blob/main/ss/airdrophunter4.jpg)
-![AirdropHunter](https://github.com/dnx100/AirdropHunter-Automated-Blockchain-Transactions/blob/main/ss/airdrophunter5.jpg)
+![AirdropHunter](https://github.com/dnx100/AirdropHunter-AirdropBot-Automated-Blockchain-Transactions/blob/main/ss/airdrophunter1.jpg)
+![AirdropHunter](https://github.com/dnx100/AirdropHunter-AirdropBot-Automated-Blockchain-Transactions/blob/main/ss/airdrophunter2.jpg)
+![AirdropHunter](https://github.com/dnx100/AirdropHunter-AirdropBot-Automated-Blockchain-Transactions/blob/main/ss/airdrophunter3.jpg)
+![AirdropHunter](https://github.com/dnx100/AirdropHunter-AirdropBot-Automated-Blockchain-Transactions/blob/main/ss/airdrophunter4.jpg)
+![AirdropHunter](https://github.com/dnx100/AirdropHunter-AirdropBot-Automated-Blockchain-Transactions/blob/main/ss/airdrophunter5.jpg)
 
 
 airdrop
