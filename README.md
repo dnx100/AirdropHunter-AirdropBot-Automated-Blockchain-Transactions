@@ -8,7 +8,7 @@ When I saw that I could program these routes, I decided to write this program.
 Tested on EVM networks only. It is still under construction, I will also work on rollups and nonevm chains in the final stage.
 I'm thinking of writing a config generator via github.
 
-Made special for upcoming zkSync Era and Polygon zkEVM airdrops.
+Specially made for upcoming zkSync Era and Polygon zkEVM airdrops.
 
 
 TO-DO
